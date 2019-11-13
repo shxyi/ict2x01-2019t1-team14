@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-buttons slot="start">
+    <ion-back-button  defaultHref="/"></ion-back-button>
+</ion-buttons>
+
+<ion-content padding>
+
+<ion-item>
+    <ion-input type="text" placeholder="Username" [(ngModel)] = "username"></ion-input>
+</ion-item>
+
+<ion-item>
+    <ion-input placeholder="Password" type="password" [(ngModel)]= "password"></ion-input>
+</ion-item>
+
+<ion-item>
+    <ion-input placeholder="Confirm Password" type="password" [(ngModel)]= "cpassword"></ion-input>
+</ion-item>
+
+<ion-item>
+    <ion-input type="text" placeholder="Age" [(ngModel)] = "age"></ion-input>
+</ion-item>
+
+<ion-item>
+      <ion-input placeholder="Email" type="email" [(ngModel)]= "email"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label>Gender</ion-label>
+    <ion-select placeholder="Select One" [(ngModel)]="gender">
+      <ion-select-option value="f">Female</ion-select-option>
+      <ion-select-option value="m">Male</ion-select-option>
+    </ion-select>
+</ion-item>
+
+<ion-item>
+  <ion-label>Commute Method</ion-label>
+    <ion-select placeholder="Select One" [(ngModel)]="commuteM">
+      <ion-select-option value="w">Walking</ion-select-option>
+      <ion-select-option value="o">Others</ion-select-option>
+    </ion-select>
+</ion-item>
+
+
+<div padding>
+  <ion-button expand="block" color="dark" (click) ='verifyRegister()'>Register</ion-button>
+</div>
+
+
+</ion-content>
