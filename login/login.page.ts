@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
+import { UserService } from '../user.service';
 
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -15,12 +16,15 @@ export class LoginPage implements OnInit {
   email: string = ""
   password: string = ""
 
+  hasVerifiedEmail = true;
+
   constructor(
     public afAuth: AngularFireAuth,
     public alertController: AlertController,
-    public router: Router
+    public router: Router,
+    public user: UserService,
 
-  ) { }
+  ) {}
 
   ngOnInit() {
   }
@@ -57,12 +61,12 @@ export class LoginPage implements OnInit {
 
     try {
       const res = await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.password)
-      if(res.user.verifyEmail) {
+      if(res.user.emailVerified) {
         this.router.navigate(['direction'])
       }
       else {
         await emailErrorAlert.present();
-        this.sendEmailVerification(email);
+        this.sendEmailVerification();
       }
 
       if(res.user) {
@@ -79,9 +83,9 @@ export class LoginPage implements OnInit {
   }
 
 
-  sendVerificationEmail(){
+  sendEmailVerification(){
   this.afAuth.authState.subscribe(user =>{
-    user.sendVerificationEmail().then(() => {
+    user.sendEmailVerification().then(() => {
       console.log("Email has been sent");
       })
     });

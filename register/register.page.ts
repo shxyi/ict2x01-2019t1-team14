@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { auth } from 'firebase/app'
+
+import { AngularFirestore } from '@angular/fire/firestore'
+import { UserService } from '../user.service';
 
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -29,7 +31,8 @@ export class RegisterPage implements OnInit {
     public afAuth: AngularFireAuth,
     public alertController: AlertController,
     public router: Router,
-    //public afStore: AngularFirestoreModule,
+    public user: UserService,
+    public afstore: AngularFirestore
   ) { }
 
 	ngOnInit() {
@@ -112,7 +115,7 @@ export class RegisterPage implements OnInit {
       try {
         const res = await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
 
-        this.afStore.doc('users/${res.user.uid}').set({
+        this.afstore.doc('users/${res.user.uid}').set({
           username, password, email, age, gender, commuteM
         })
 
