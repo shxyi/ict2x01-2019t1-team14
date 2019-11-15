@@ -91,12 +91,6 @@ export class LoginPage implements OnInit {
     });
   }
 
-
-//     else{
-//
-//       }
-//     }
-//   }
   async goRegister() {
     this.router.navigate(['register'])
   }

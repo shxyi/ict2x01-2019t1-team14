@@ -4,6 +4,7 @@ import { auth } from 'firebase/app'
 
 import { AngularFirestore } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -15,76 +16,37 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
 
-  username: string = ""
-	password: string = ""
-	cpassword: string = ""
-  email: string = ""
-  age: string = ""
-
-  gender:string = ""
-  commuteM: string = ""
-
-  //emailFormat: true;
-  //ageFormat: true;
+  public loginForm: FormGroup;
 
 	constructor(
     public afAuth: AngularFireAuth,
     public alertController: AlertController,
     public router: Router,
+    public formBuilder: FormBuilder,
     public user: UserService,
     public afstore: AngularFirestore
-  ) { }
+  ) {
+    this.loginForm = formBuilder.group({
+            username: ['', Validators.compose([Validators.maxLength(25), Validators.required, Validators.pattern('[a-zA-Z]*')])],
+            password: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            cpassword: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            email: ['', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])],
+            age: ['', Validators.required],
+            gender: ['', Validators.required],
+            commuteM: ['', Validators.required],
+        });
+  }
+
+    username: string = ""
+  	password: string = ""
+  	cpassword: string = ""
+    email: string = ""
+    age: string = ""
+    gender:string = ""
+    commuteM: string = ""
 
 	ngOnInit() {
 	}
-
-  // validateEmail(eaddress, edomain){
-  //   if (edomain != "@gmail.com" || eaddress =="") {
-  //     this.showAlert("Error!", "Invalid email format, please check again.")
-  //     this.emailFormat = false;
-  //   }
-  //
-  //   else {
-  //     return this.emailFormat
-  //   }
-  // }
-  //
-  // validateAge(age){
-  //   if (age <=0 || age >= 90) {
-  //     this.showAlert("Error!", "Invalid age, please check again.")
-  //     this.ageFormat = false;
-  //   }
-  //
-  //   else {
-  //     return this.ageFormat
-  //   }
-  // }
-  //
-  // validatePassword(password, cpassword){
-  //   if (password != cpassword) {
-  //     this.showAlert("Error!", "Password does not match.")
-  //     this.ageFormat = false;
-  //   }
-  //
-  //   else {
-  //     return this.ageFormat
-  //   }
-  // }
-  //
-  // testValidateEmail() {
-  //   bool testEmailFormat = validateEmail("ict2101")
-  //   return testEmailFormat
-  // } // wrong email format, need to be "@gmail.com"
-  //
-  // testValidateEmail() {
-  //   bool testEmailFormat = validateEmail("ict2101@gmail.com")
-  //   return testEmailFormat
-  // } // valid email format
-  //
-  // testValidatePassword() {
-  //   bool testPassword = validatePassword("password123", "password321")
-  //   return testPassword
-  // } // password keyed in and confirm password is different
 
   async verifyRegister() {
     const { username, password, cpassword, email, age, gender, commuteM } = this
@@ -103,7 +65,7 @@ export class RegisterPage implements OnInit {
 
       const errorEAlert = await this.alertController.create({
           header: "Error!",
-          message: "Email is in the wrong format",
+          message: "Invalid details",
           buttons: ['OK']
         })
 
@@ -133,4 +95,31 @@ export class RegisterPage implements OnInit {
       }
     }
   }
+
+  public isValid(control: FormControl): any {
+
+        if(isNaN(control.value)){
+            return {
+                "not a number": true
+            };
+        }
+
+        if(control.value % 1 !== 0){
+            return {
+                "not a whole number": true
+            };
+        }
+
+        if(control.value < 10){
+            return {
+                "too young": true
+            };
+        }
+
+        if (control.value > 100){
+            return {
+                "not realistic": true
+            };
+          }
+      }
 }

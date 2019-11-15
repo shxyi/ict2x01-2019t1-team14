@@ -9,47 +9,59 @@
 </ion-buttons>
 
 <ion-content padding>
+  <form [formGroup]="loginForm">
 
-<ion-item>
-    <ion-input type="text" placeholder="Username" [(ngModel)] = "username"></ion-input>
-</ion-item>
+    <ion-item>
+          <ion-icon name="contact"></ion-icon> <ion-input type="text" placeholder="  Username" [(ngModel)] = "username" formControlName="username" [class.invalid]="!loginForm.controls.username.valid && loginForm.controls.username.dirty"></ion-input>
+    </ion-item>
 
-<ion-item>
-    <ion-input placeholder="Password" type="password" [(ngModel)]= "password"></ion-input>
-</ion-item>
+    <ion-item *ngIf="!loginForm.controls.username.valid  && (loginForm.controls.username.dirty)">
+    <h6 style="color:red;">Please enter a valid name.</h6>
+    </ion-item>
 
-<ion-item>
-    <ion-input placeholder="Confirm Password" type="password" [(ngModel)]= "cpassword"></ion-input>
-</ion-item>
+    <ion-item>
+        <ion-icon name="key"></ion-icon><ion-input placeholder="   Password" type="password" [(ngModel)]= "password" formControlName="password" [class.invalid]="!loginForm.controls.password.valid && loginForm.controls.password.dirty"></ion-input>
+    </ion-item>
 
-<ion-item>
-    <ion-input type="text" placeholder="Age" [(ngModel)] = "age"></ion-input>
-</ion-item>
+    <ion-item *ngIf="!loginForm.controls.password.valid  && (loginForm.controls.password.dirty)">
+    <h6 style="color:red;">Please enter a valid password.</h6>
+    </ion-item>
 
-<ion-item>
-      <ion-input placeholder="Email" type="email" [(ngModel)]= "email"></ion-input>
-</ion-item>
+    <ion-item>
+        <ion-icon name="key"></ion-icon><ion-input placeholder="   Confirm Password" type="password" [(ngModel)]= "cpassword" formControlName="cpassword" [class.invalid]="!loginForm.controls.cpassword.valid && loginForm.controls.cpassword.dirty"></ion-input>
+    </ion-item>
 
-<ion-item>
-  <ion-label>Gender</ion-label>
-    <ion-select placeholder="Select One" [(ngModel)]="gender">
-      <ion-select-option value="f">Female</ion-select-option>
-      <ion-select-option value="m">Male</ion-select-option>
-    </ion-select>
-</ion-item>
+    <ion-item *ngIf="!loginForm.controls.password.valid  && (loginForm.controls.password.dirty)">
+    <h6 style="color:red;">Please enter a valid password.</h6>
+    </ion-item>
 
-<ion-item>
-  <ion-label>Commute Method</ion-label>
-    <ion-select placeholder="Select One" [(ngModel)]="commuteM">
-      <ion-select-option value="w">Walking</ion-select-option>
-      <ion-select-option value="o">Others</ion-select-option>
-    </ion-select>
-</ion-item>
+    <ion-item>
+       <ion-icon name="create"></ion-icon><ion-input type="text" placeholder="   Age" [(ngModel)] = "age" formControlName="age" [class.invalid]="!loginForm.controls.age.valid && loginForm.controls.age.dirty"></ion-input>
+    </ion-item>
 
+    <ion-item>
+          <ion-icon name="mail"></ion-icon><ion-input placeholder="   Email" type="email" [(ngModel)]= "email" formControlName="email" ></ion-input>
+    </ion-item>
 
-<div padding>
-  <ion-button expand="block" color="dark" (click) ='verifyRegister()'>Register</ion-button>
-</div>
+    <ion-item>
+      <ion-icon name="man"></ion-icon><ion-label>Gender</ion-label>
+        <ion-select placeholder="Select One" [(ngModel)]="gender" formControlName="gender" [class.invalid]="!loginForm.controls.gender.valid && loginForm.controls.gender.dirty">
+          <ion-select-option value="f">Female</ion-select-option>
+          <ion-select-option value="m">Male</ion-select-option>
+        </ion-select>
+    </ion-item>
 
+    <ion-item>
+      <ion-icon name="walk"></ion-icon><ion-label>Commute Method</ion-label>
+        <ion-select placeholder="Select One" [(ngModel)]="commuteM" formControlName="commuteM" [class.invalid]="!loginForm.controls.commuteM.valid && loginForm.controls.commuteM.dirty">
+          <ion-select-option value="w">Walking</ion-select-option>
+          <ion-select-option value="o">Others</ion-select-option>
+        </ion-select>
+    </ion-item>
 
+    <div padding>
+      <ion-button expand="block" color="dark" (click) ='verifyRegister()'>Register</ion-button>
+    </div>
+
+  </form>
 </ion-content>
