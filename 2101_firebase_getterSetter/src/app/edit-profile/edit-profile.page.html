@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username" placeholder="{{ username }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password" placeholder="{{ password }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input type="password" [(ngModel)]="cpassword"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="text" [(ngModel)]="email" placeholder="{{ email }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Gender</ion-label>
+      <ion-select [(ngModel)]="gender">
+        <ion-select-option value="male">Male</ion-select-option>
+        <ion-select-option value="female">Female</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Age</ion-label>
+      <ion-input type="number" [(ngModel)]="age" placeholder="{{ age }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Commute Method</ion-label>
+      <ion-select [(ngModel)]="commuteMethod">
+        <ion-select-option value="walking">Walking</ion-select-option>
+        <ion-select-option value="wheelchair">Wheelchair</ion-select-option>
+        <ion-select-option value="pram">Pram</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button fill="solid" expand="block" (click)="updateProfile()">Update Profile</ion-button>
+  </ion-list>
+</ion-content>

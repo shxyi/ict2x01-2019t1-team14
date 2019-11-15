@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/login"></ion-back-button>
+      </ion-buttons>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input type="password" [(ngModel)]="cpassword"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="text" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Gender</ion-label>
+      <ion-select [(ngModel)]="gender">
+        <ion-select-option value="Male">Male</ion-select-option>
+        <ion-select-option value="Female">Female</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Age</ion-label>
+      <ion-input type="number" [(ngModel)]="age"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Commute Method</ion-label>
+      <ion-select [(ngModel)]="commuteMethod">
+        <ion-select-option value="Walking">Walking</ion-select-option>
+        <ion-select-option value="Wheelchair">Wheelchair</ion-select-option>
+        <ion-select-option value="Pram">Pram</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button class="ion-margin-top" fill="solid" expand="block" (click)="register()">Register</ion-button>
+  </ion-list>
+</ion-content>
