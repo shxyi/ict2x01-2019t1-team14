@@ -29,7 +29,10 @@ export class LoginPage implements OnInit {
     public router: Router,
     public user: UserService,
     private afs: AngularFirestore,
-  ) { }
+  ) {
+    let date = new Date()
+    console.log("Current Date ",date) 
+  }
 
   ngOnInit() {
   }

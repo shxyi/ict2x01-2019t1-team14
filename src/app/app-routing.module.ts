@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'edit-profile', loadChildren: './edit-profile/edit-profile.module#EditProfilePageModule' },
   { path: 'forget-password', loadChildren: './forget-password/forget-password.module#ForgetPasswordPageModule' },
   { path: 'route', loadChildren: './route/route.module#RoutePageModule' },
+  { path: 'conquer', loadChildren: './conquer/conquer.module#ConquerPageModule' },
 ];
 
 @NgModule({
