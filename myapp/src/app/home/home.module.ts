@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { HomePage } from './home.page';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
 
 const routes: Routes = [
     {
@@ -22,6 +24,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         ReactiveFormsModule
     ],
-  declarations: [HomePage]
+    declarations: [HomePage],
+    providers: [Geolocation]
 })
 export class HomePageModule {}

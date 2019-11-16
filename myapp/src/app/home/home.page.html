@@ -8,19 +8,28 @@
 </ion-header>
 <ion-content>
     <form [formGroup]="directionForm" (ngSubmit)="generateRoutes(directionForm.value)">
-        <ion-item>
+        <!--<ion-item>
             <ion-label position="floating">Source</ion-label>
             <ion-input formControlName="source"></ion-input>
-        </ion-item>
+        </ion-item>-->
         <ion-item>
             <ion-label position="floating">Destination</ion-label>
             <ion-input formControlName="destination"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="floating">Commute Method</ion-label>
-            <ion-input formControlName="travelMode" autocapitalize="characters"></ion-input>    
+            <ion-input formControlName="travelMode" autocapitalize="characters"></ion-input>
         </ion-item>
         <ion-button expand="full" type="submit" [disabled]="directionForm.invalid">Get Direction</ion-button>
     </form>
+
+    <!--<button ion-button full icon-left (click)="startTracking()" *ngIf="!isTracking">
+        <ion-icon name="locate"></ion-icon>
+        Start Tracking
+    </button>
+    <button ion-button full color="danger" icon-left (click)="stopTracking()" *ngIf="isTracking">
+        <ion-icon name="hand"></ion-icon>
+        Stop Tracking
+    </button>-->
     <div #mapElement class="map"></div>
 </ion-content>
