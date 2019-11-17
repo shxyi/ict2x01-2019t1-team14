@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sanyin Google Map</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row [hidden]="debugging">
+    <ion-col><b>Current Location:</b></ion-col>
+    <ion-col id="currentLocation"></ion-col>
+  </ion-row>
+
+  <!-- debugger -->
+  <ion-button [hidden]="debugging"fill="solid" expand="block" (click)="otherLocation()">Other Location</ion-button>
+  <ion-button [hidden]="debugging"fill="solid" expand="block" (click)="yiochukang()">Yio Chu Kang</ion-button>
+  <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="angmokio()">Ang Mo Kio</ion-button>
+  <ion-button [hidden]="atStation" fill="solid" expand="block" (click)="conquer()">Conquer</ion-button>
+</ion-content>

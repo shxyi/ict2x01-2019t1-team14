@@ -18,6 +18,7 @@ export class ProfilePage implements OnInit {
   gender: any
   age: number
   email: string
+  avatar: string
 
   constructor(
     private afs: AngularFirestore,
@@ -32,6 +33,13 @@ export class ProfilePage implements OnInit {
       this.gender = event.gender
       this.age = event.age
       this.email = event.email
+
+      if(this.gender === "Female") {
+        this.avatar = "../assets/icon/female.png"
+      }
+      else {
+        this.avatar = "../assets/icon/male.png"
+      }
     })
   }
 

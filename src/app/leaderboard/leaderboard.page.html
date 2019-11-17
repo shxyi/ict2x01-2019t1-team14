@@ -7,18 +7,25 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding onload='leaderboard()'>
-  <ion-img id="trophy" src="../assets/icon/trophy.png"></ion-img>
-  <ion-row>
-    <ion-col><b>Username</b></ion-col>
-    <ion-col><b>Points</b></ion-col>
-  </ion-row>
-  <ion-grid id="grid">
-  </ion-grid>
-  
+<ion-content>
+  <div id="border">
+    <ion-img id="trophy" src="../assets/icon/trophy.png"></ion-img>
+  </div>
+  <div padding>
+    <div id="blank"></div>
+    <ion-row>
+      <ion-col><b>Rank</b></ion-col>
+      <ion-col><b>Username</b></ion-col>
+      <ion-col><b>Points</b></ion-col>
+    </ion-row>
+    <ion-grid id="grid">
+    </ion-grid>
+    
+    <ion-img id="avatar" [src]="avatar"></ion-img>
+    <p id="points"><b>Points:</b> {{ points }}</p>
 
-  <!-- debugger -->
-  <p [hidden]="debugging">Points: {{ points }}</p>
-  <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="addPoints()">Add Points</ion-button>
-  <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="deductPoints()">Deduct Points</ion-button>
+    <!-- debugger -->
+    <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="addPoints()">Add Points</ion-button>
+    <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="deductPoints()">Deduct Points</ion-button>
+  </div>
 </ion-content>

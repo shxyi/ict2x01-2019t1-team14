@@ -4,15 +4,38 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-img src="../assets/icon/profile-icon.png"></ion-img>
+<ion-content>
+  <div id="border">
+    <ion-img id="avatar" [src]="avatar"></ion-img>
+  </div>
+  <div padding>
+    <div id="blank"></div>
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="person"></ion-icon> Username</ion-label>
+      <ion-input readonly placeholder="{{ username }}"></ion-input>
+    </ion-item>
 
-  <p><b>Username:</b> {{ username }}</p>
-  <p><b>Email:</b> {{ email }}</p>
-  <p><b>Gender:</b> {{ gender }}</p>
-  <p><b>Age:</b> {{ age }}</p>
-  <p><b>Commute Method:</b> {{ commuteMethod }}</p>
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="mail"></ion-icon> Email</ion-label>
+      <ion-input readonly placeholder="{{ email }}"></ion-input>
+    </ion-item>
 
-  <ion-button fill="solid" expand="block" (click)="editProfile()">Edit Profile</ion-button>
-  <ion-button fill="solid" expand="block" (click)="logOut()">Log Out</ion-button>
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="contacts"></ion-icon> Gender</ion-label>
+      <ion-input readonly placeholder="{{ gender }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="calendar"></ion-icon> Age</ion-label>
+      <ion-input readonly placeholder="{{ age }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="walk"></ion-icon> Commute Method</ion-label>
+      <ion-input readonly placeholder="{{ commuteMethod }}"></ion-input>
+    </ion-item>
+  
+    <ion-button id="button" fill="solid" expand="block" (click)="editProfile()">Edit Profile</ion-button>
+    <ion-button fill="solid" expand="block" (click)="logOut()">Log Out</ion-button>
+  </div>
 </ion-content>

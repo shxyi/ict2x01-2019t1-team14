@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ConquerPage } from './conquer.page';
+import { SanyinRoutePage } from './sanyin-route.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ConquerPage
+    component: SanyinRoutePage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ConquerPage]
+  declarations: [SanyinRoutePage]
 })
-export class ConquerPageModule {}
+export class SanyinRoutePageModule {}

@@ -11,6 +11,8 @@ export class LeaderboardPage implements OnInit {
   mainuser: AngularFirestoreDocument
   sub
   points: number
+  gender: string
+  avatar: string
   listOfUsers = []
   topRanking = 15
   debugging = !false /* debugger */
@@ -19,13 +21,17 @@ export class LeaderboardPage implements OnInit {
     private afs: AngularFirestore,
     private user: UserService,
   ) {
-    /* debugger */
-    if (!this.debugging) {
-      this.mainuser = afs.doc(`users/${user.getUID()}`)
-      this.sub = this.mainuser.valueChanges().subscribe(event => {
-        this.points = event.points
-      })
-    }
+    this.mainuser = afs.doc(`users/${user.getUID()}`)
+    this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.points = event.points
+      this.gender = event.gender
+      if(this.gender === "Female") {
+        this.avatar = "../assets/icon/female.png"
+      }
+      else {
+        this.avatar = "../assets/icon/male.png"
+      }
+    })
     this.leaderboard()
   }
 
@@ -58,11 +64,32 @@ export class LeaderboardPage implements OnInit {
       for(let i=0; i<limit; i++){
         let row = document.createElement('ion-row');
         row.setAttribute("id", "row"+i)
-        let col = document.createElement('ion-col');
-        col.className = "ion-float-left"
-        col.textContent = this.listOfUsers[i].username
+        /* css */
+        row.style.borderStyle = "outset"
+        row.style.borderRadius = "20px"
+        if(i == 0) {
+          row.style.backgroundColor = "gold"
+          row.style.borderColor = "orange"
+        }
+        else if(i == 1) {
+          row.style.backgroundColor = "silver"
+          row.style.borderColor = "darkgrey"
+        }
+        else if(i == 2) {
+          row.style.backgroundColor = "#CD7F32"
+          row.style.borderColor = "#A46628"
+        }
+        row.style.marginBottom = "3px"
+        let rankCol = document.createElement('ion-col');
+        rankCol.className = "ion-float-left"
+        rankCol.style.textAlign = "center"
+        rankCol.textContent = (i+1).toString()
+        let nameCol = document.createElement('ion-col');
+        nameCol.style.textAlign = "center"
+        nameCol.textContent = this.listOfUsers[i].username
         /* append */
-        row.appendChild(col)
+        row.appendChild(rankCol)
+        row.appendChild(nameCol)
         document.querySelector('#grid').appendChild(row);
       } 
 
@@ -70,6 +97,7 @@ export class LeaderboardPage implements OnInit {
       for(let i=0; i<limit; i++){
         let col = document.createElement('ion-col');
         col.className = "ion-float-right"
+        col.style.textAlign = "center"
         col.textContent = this.listOfUsers[i].points
         /* append */
         document.querySelector('#row'+i).appendChild(col);
