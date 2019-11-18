@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="customForm">
+    <div align = "center">
+
+      <h3> We would like your feedback to rate your journey  <ion-icon name="happy"></ion-icon></h3>
+
+      <h2>Safety</h2>
+      <ionic4-star-rating #rating
+        activeIcon = "ios-thumbs-up"
+        defaultIcon = "ios-star-outline"
+        activeColor = "#F7DC6F"
+        defaultColor = "#F5B041"
+        readonly = "false"
+        rating = "1"
+        fontSize = "46px"
+        (ratingChanged)="logRatingChange($event)"
+        formControlName="starRating" [(ngModel)]="safety">
+      </ionic4-star-rating>
+
+      <h2>Speed</h2>
+      <ionic4-star-rating #rating2
+        activeIcon = "ios-paper-plane"
+        defaultIcon = "ios-star-outline"
+        activeColor = "#82E0AA"
+        defaultColor = "#27AE60"
+        readonly = "false"
+        rating = "3"
+        fontSize = "46px"
+        (ratingChanged)="logRatingChange2($event)"
+        formControlName="starRating2" [(ngModel)]="speed">
+      </ionic4-star-rating>
+
+      <h2>Enjoyment</h2>
+      <ionic4-star-rating #rating3
+        activeIcon = "ios-happy"
+        defaultIcon = "ios-star-outline"
+        activeColor = "#F1948A"
+        defaultColor = "#FF5C5C"
+        readonly = "false"
+        rating = "3"
+        fontSize = "46px"
+        (ratingChanged)="logRatingChange2($event)"
+        formControlName="starRating3" [(ngModel)]="enjoyment">
+      </ionic4-star-rating>
+      <br>
+
+    <ion-button color = "primary" (click)="feedback()" [disabled]="!safety || !speed || !enjoyment"> Submit Rating</ion-button>
+    </div>
+  </form>
+</ion-content>
