@@ -60,7 +60,7 @@
     </ion-item>
 
     <div padding>
-      <ion-button expand="block" color="dark" (click) ='verifyRegister()'>Register</ion-button>
+      <ion-button [disabled]="!gender || !commuteM" expand="block" color="dark" (click) ='verifyRegister()'>Register</ion-button>
     </div>
 
   </form>
