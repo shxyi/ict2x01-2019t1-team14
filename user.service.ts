@@ -2,22 +2,36 @@ import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { first } from 'rxjs/operators'
 import { auth } from 'firebase/app'
+import { AngularFirestore } from '@angular/fire/firestore';
 
 interface user {
 	email: string,
 	uid: string
 }
 
+interface feedback {
+	safety: number,
+	speed: number,
+	enjoyment: number,
+	routeID: string
+}
+
 @Injectable()
 export class UserService {
 	private user: user
+	private feedback: feedback
 
-	constructor(private afAuth: AngularFireAuth) {
-
-	}
+	constructor(
+		private afAuth: AngularFireAuth,
+		private firestore: AngularFirestore
+	) {}
 
 	setUser(user: user) {
 		this.user = user
+	}
+
+	setFeedback(feedback) {
+		return this.firestore.collection('feedback').add(feedback);
 	}
 
 	getEmail(): string {

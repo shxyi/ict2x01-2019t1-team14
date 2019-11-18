@@ -1,8 +1,5 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -18,7 +15,8 @@
       readonly = "false"
       rating = "2"
       fontSize = "32px"
-      (ratingChanged)="logRatingChange($event)">
+      (ratingChanged)="logRatingChange($event)"
+      formControlName="starRating" [(ngModel)]="safety">
   </ionic4-star-rating>
 
   <h2>Speed</h2>
@@ -30,11 +28,12 @@
       readonly = "false"
       rating = "3"
       fontSize = "32px"
-      (ratingChanged)="logRatingChange2($event)">
+      (ratingChanged)="logRatingChange2($event)"
+      formControlName="starRating2" [(ngModel)]="speed">
   </ionic4-star-rating>
 
   <h2>Enjoyment</h2>
-  <ionic4-star-rating #rating2
+  <ionic4-star-rating #rating3
       activeIcon = "ios-star"
       defaultIcon = "ios-star-outline"
       activeColor = "#d1301a"
@@ -42,8 +41,11 @@
       readonly = "false"
       rating = "3"
       fontSize = "32px"
-      (ratingChanged)="logRatingChange2($event)">
+      (ratingChanged)="logRatingChange2($event)"
+      formControlName="starRating3" [(ngModel)]="enjoyment">
   </ionic4-star-rating>
+
+  <ion-button (click)="feedback()" [disabled]="!safety || !speed || !enjoyment"> Submit Feedback</ion-button>
 
   </form>
 </ion-content>
