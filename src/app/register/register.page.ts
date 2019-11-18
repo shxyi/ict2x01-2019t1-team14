@@ -21,7 +21,7 @@ export class RegisterPage implements OnInit {
   age: number
   commuteMethod: any
   points: number = 0
-  
+  stationConquered = ""
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -35,7 +35,7 @@ export class RegisterPage implements OnInit {
   }
 
   async register(){
-    const { username, password, cpassword, email, gender, age, commuteMethod, points } = this 
+    const { username, password, cpassword, email, gender, age, commuteMethod, points, stationConquered } = this 
 
     /* validation */
     if(username=="" || password=="" || cpassword=="" || email=="" || gender==null || age==null || commuteMethod==null){
@@ -59,6 +59,7 @@ export class RegisterPage implements OnInit {
          age,
          commuteMethod,
          points,
+         stationConquered
         })
         this.user.setUser({
           uid: result.user.uid,
@@ -69,6 +70,7 @@ export class RegisterPage implements OnInit {
           age,
           commuteMethod,
           points,
+          stationConquered
         })
 
         this.showAlert("Sucess", "Registered successfully.")

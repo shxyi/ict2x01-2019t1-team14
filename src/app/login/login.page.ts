@@ -20,8 +20,9 @@ export class LoginPage implements OnInit {
   age: number
   commuteMethod: any
   points: number
+  stationConquered = ""
   mainuser: AngularFirestoreDocument
-  sub
+  mainstation: AngularFirestoreDocument
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -38,7 +39,7 @@ export class LoginPage implements OnInit {
   }
 
   async login(){
-    const { username, password, email, gender, age, commuteMethod, points } = this 
+    const { username, password, email, gender, age, commuteMethod, points, stationConquered} = this 
 
     /* validation */
     if(username=="" || password==""){
@@ -48,6 +49,8 @@ export class LoginPage implements OnInit {
 
     /* login */
     try{
+      let username = "chris"
+      let password = "qscmlp"
       const result = await this.afAuth.auth.signInWithEmailAndPassword(username+'@firebase.com', password)
       if(result.user){
         this.user.setUser({
@@ -58,7 +61,8 @@ export class LoginPage implements OnInit {
           gender,
           age,
           commuteMethod,
-          points
+          points,
+          stationConquered
         })
 
         /* clear field */
@@ -80,6 +84,12 @@ export class LoginPage implements OnInit {
         this.showAlert("Error", error.message)
       }
     }
+  }
+
+  getHourMin_strToNum(str: string, data: number): number { /* split string and return num cast hour*/
+    let str1 = str.split('_') /* split date and time */
+    let str2 = str1[1].split(':') /* split hour and minute */
+    return parseInt(str2[data]) /* num cast */
   }
 
   async showAlert(header: string, message: string) {

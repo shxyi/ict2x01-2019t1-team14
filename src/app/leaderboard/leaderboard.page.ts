@@ -9,12 +9,16 @@ import { UserService } from '../user.service';
 })
 export class LeaderboardPage implements OnInit {
   mainuser: AngularFirestoreDocument
-  sub
+  mainstation: AngularFirestoreDocument
+  usersub
+  stationsub
   points: number
   gender: string
   avatar: string
+  hourPassed: number
   listOfUsers = []
   topRanking = 15
+  stationConquered: string
   debugging = !false /* debugger */
 
   constructor(
@@ -22,14 +26,18 @@ export class LeaderboardPage implements OnInit {
     private user: UserService,
   ) {
     this.mainuser = afs.doc(`users/${user.getUID()}`)
-    this.sub = this.mainuser.valueChanges().subscribe(event => {
+    this.usersub = this.mainuser.valueChanges().subscribe(event => {
       this.points = event.points
       this.gender = event.gender
+      this.stationConquered = event.stationConquered
       if(this.gender === "Female") {
         this.avatar = "../assets/icon/female.png"
       }
       else {
         this.avatar = "../assets/icon/male.png"
+      }
+      if(this.stationConquered == ""){
+        this.stationConquered = "None"
       }
     })
     this.leaderboard()
@@ -109,6 +117,51 @@ export class LeaderboardPage implements OnInit {
     document.querySelector('#grid').innerHTML = '' /* remove all child */
     this.listOfUsers = [] /* reset data */
     this.leaderboard() /* update leaderboard */
+    this.hourlyBonus() /* update conquer hourly bonus (if any) */
+  }
+
+  async hourlyBonus() {
+    if(this.stationConquered != ""){
+      /* get station from firebase database */
+      this.afs.firestore.collection('stations').get().then((snapshot) => { /* https://www.youtube.com/watch?v=kmTECF0JZyQ */
+        snapshot.docs.forEach(doc => {
+          if(doc.id === this.stationConquered) {
+            let conquerHour = this.getHourMin_strToNum(doc.data().conquerDateTime, 0)
+            let conquerMin = this.getHourMin_strToNum(doc.data().conquerDateTime, 1)
+
+            let date = new Date()
+            let hour = date.getHours() - conquerHour
+            if(hour < 0) {
+              hour += 24 /* pass midnight, next day */
+            }
+            let min = date.getMinutes() - conquerMin
+            if(min < 0){
+              hour -= 1
+            }
+
+            if(hour > 9){
+              hour = 9
+            }
+            hour -= doc.data().hourPassed
+            this.mainuser.update({ /* update firebase variable */
+              points: this.points + (hour * doc.data().hourlyBonusPoints)
+            })
+            console.log("Added " + hour + " hours of conquering bonus")
+            this.mainstation = this.afs.doc(`stations/${doc.id}`)
+            this.hourPassed = doc.data().hourPassed
+            this.mainstation.update({ /* update firebase variable */
+              hourPassed: this.hourPassed + hour
+            })
+          }
+        })
+      })
+    }
+  }
+
+  getHourMin_strToNum(str: string, data: number): number { /* split string and return num cast hour*/
+    let str1 = str.split('_') /* split date and time */
+    let str2 = str1[1].split(':') /* split hour and minute */
+    return parseInt(str2[data]) /* num cast */
   }
 
   async addPoints(){

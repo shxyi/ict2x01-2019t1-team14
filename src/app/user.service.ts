@@ -10,6 +10,7 @@ interface user{ /* type struct */
     age: number
     commuteMethod: any
     points: number
+    stationConquered: string
 }
 
 @Injectable()
@@ -62,5 +63,9 @@ export class UserService {
 
     getPoints(): number {
         return this.user.points
+    }
+
+    getStationConquered(): string {
+        return this.user.stationConquered
     }
 }

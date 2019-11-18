@@ -22,7 +22,8 @@
     </ion-grid>
     
     <ion-img id="avatar" [src]="avatar"></ion-img>
-    <p id="points"><b>Points:</b> {{ points }}</p>
+    <p class="center"><b>Points:</b> {{ points }}</p>
+    <p class="center"><b>Station Conquered:</b> {{ stationConquered }}</p>
 
     <!-- debugger -->
     <ion-button [hidden]="debugging" fill="solid" expand="block" (click)="addPoints()">Add Points</ion-button>

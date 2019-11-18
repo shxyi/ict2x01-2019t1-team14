@@ -6,8 +6,8 @@ const routes: Routes = [{
     path: '', /* default */
     component: TabsPage, 
     children: [
-        { path: '', redirectTo: 'route', pathMatch: 'full' },
-        { path: 'route', loadChildren: '../route/route.module#RoutePageModule' },
+        { path: '', redirectTo: 'sanyin-route', pathMatch: 'full' },
+        { path: 'sanyin-route', loadChildren: '../sanyin-route/sanyin-route.module#SanyinRoutePageModule' },
         { path: 'leaderboard', loadChildren: '../leaderboard/leaderboard.module#LeaderboardPageModule' },
         { path: 'profile', loadChildren: '../profile/profile.module#ProfilePageModule' },
     ]}];

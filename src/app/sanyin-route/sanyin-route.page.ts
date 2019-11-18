@@ -11,7 +11,15 @@ import { AlertController } from '@ionic/angular'; /* import pop up modal alert *
 export class SanyinRoutePage implements OnInit {
   currentLocation: string
   listOfStation = []
+  mainstation: AngularFirestoreDocument
   mainuser: AngularFirestoreDocument
+  stationsub
+  usersub
+  username: string
+  stationPoints: number
+  stationConquered: string
+  hourPassed: number
+  userPoints: number
   conquerDuration = 9 /* hours */
   debugging = !true /* debugger */
   atStation = !false
@@ -20,7 +28,52 @@ export class SanyinRoutePage implements OnInit {
     private afs: AngularFirestore,
     private user: UserService,
     public alert: AlertController,
-  ) { }
+  ) {
+    this.mainuser = afs.doc(`users/${user.getUID()}`)
+		this.usersub = this.mainuser.valueChanges().subscribe(event => {
+      this.userPoints = event.points
+      this.username = event.username
+      this.stationConquered = event.stationConquered
+    })
+
+    /* check if conqueror over the conquering duration */
+    this.hourlyBonus() /* get remaining bonus first */
+    this.afs.firestore.collection('stations').get().then((snapshot) => { /* https://www.youtube.com/watch?v=kmTECF0JZyQ */
+      snapshot.docs.forEach(doc => {
+        if(doc.data().available === false){ /* conquering */
+          let date = new Date()
+          let conquerHour = this.getHourMin_strToNum(doc.data().conquerDateTime, 0)
+          let conquerMin = this.getHourMin_strToNum(doc.data().conquerDateTime, 1)
+
+          let hour = date.getHours() - conquerHour
+          if(hour < 0) {
+            hour += 24 /* pass midnight, next day */
+          }
+          if(hour >= 9){
+            let min = date.getMinutes() - conquerMin
+            if(min < 0){
+              hour -= 1
+            }
+            if(hour >= 9){
+              /* remove user */
+              this.mainuser.update({ /* update firebase variable */
+                stationConquered: ""
+              })
+
+              this.mainstation = this.afs.doc(`stations/${doc.id}`)
+              this.mainstation.update({ /* update firebase variable */
+                available: true,
+                conquerDateTime: "",
+                conqueror: "",
+                hourPassed: 0
+              })
+              console.log("9 hours have passed. Removed user from station.")
+            }
+          }
+        }
+      })
+    })
+  }
 
   ngOnInit() {
   }
@@ -46,8 +99,15 @@ export class SanyinRoutePage implements OnInit {
       snapshot.docs.forEach(doc => {
         if(doc.id === this.currentLocation) {
           if(doc.data().available === true) { /* conquer available */
-            this.mainuser = this.afs.doc(`stations/${doc.id}`)
-            this.conquerConfirm(doc)
+            if(this.stationConquered != ""){
+              this.showAlert("Fail To Conquer",
+                "You can only conquer 1 station at a time.<br><br>" +
+                "Station Conquered: " + this.stationConquered)
+            }
+            else {
+              this.mainstation = this.afs.doc(`stations/${doc.id}`) /* get station doc */
+              this.conquerConfirm(doc)
+            }
           }
           else if(doc.data().available === false) { /* conquer not available */
             let conqueror = doc.data().conqueror
@@ -74,16 +134,23 @@ export class SanyinRoutePage implements OnInit {
             hour = this.conquerDuration - hour
             if(!carryFlag && date.getMinutes()>conquerMin)
               hour -= 1
-
-            this.showAlert("Fail To Conquer",
-            "\"" + conqueror + "\"" + " is currently conquering this station.<br><br>" +
-            " Time left: " + hour + "h " + min + "min.")
+            
+            if(this.username == conqueror) {
+              this.showAlert("Conquering",
+                "You are currently conquering this station.<br><br>" +
+                " Time left: " + hour + "h " + min + "min.")
+            }
+            else {
+              this.showAlert("Fail To Conquer",
+                "\"" + conqueror + "\"" + " is currently conquering this station.<br><br>" +
+                " Time left: " + hour + "h " + min + "min.")
+            }
           }
         }
       })
     })
   }
-
+  
   getHourMin_strToNum(str: string, data: number): number { /* split string and return num cast hour*/
     let str1 = str.split('_') /* split date and time */
     let str2 = str1[1].split(':') /* split hour and minute */
@@ -101,13 +168,27 @@ export class SanyinRoutePage implements OnInit {
         {
           text: 'Conquer',
           handler: () => {
-            let date = new Date()
-            this.mainuser.update({ /* update firebase variable */
-              conqueror: "chris", /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
-              conquerDateTime: date.getFullYear() + "/" + (date.getMonth()+1) + "/" + date.getDate() +
-                "_" + date.getHours() + ":" + date.getMinutes()
-            })
-            this.showAlert("Success", "Conquer successfully.")
+            if(this.userPoints-station.data().pointsCost < 0){
+              this.showAlert("Fail To Conquer", "Insufficient points.")
+            }
+            else{
+              /* deduct user firebase variable */
+              this.mainuser.update({ /* update firebase variable */
+                points: this.userPoints - station.data().pointsCost,
+                stationConquered: station.id
+              })
+              console.log("Deduct " + station.data().pointsCost + " points")
+
+              let date = new Date()
+              /* update station firebase variable */
+              this.mainstation.update({ 
+                conqueror: this.username,
+                conquerDateTime: date.getFullYear() + "/" + (date.getMonth()+1) + "/" + date.getDate() +
+                  "_" + date.getHours() + ":" + date.getMinutes(),
+                available: false
+              })
+              this.showAlert("Success", "Conquer successfully.")
+            }
           }
         },
         {
@@ -116,6 +197,44 @@ export class SanyinRoutePage implements OnInit {
       ]
     })
     await alert.present()
+  }
+
+  async hourlyBonus() {
+    if(this.stationConquered != ""){
+      /* get station from firebase database */
+      this.afs.firestore.collection('stations').get().then((snapshot) => { /* https://www.youtube.com/watch?v=kmTECF0JZyQ */
+        snapshot.docs.forEach(doc => {
+          if(doc.id === this.stationConquered) {
+            let conquerHour = this.getHourMin_strToNum(doc.data().conquerDateTime, 0)
+            let conquerMin = this.getHourMin_strToNum(doc.data().conquerDateTime, 1)
+
+            let date = new Date()
+            let hour = date.getHours() - conquerHour
+            if(hour < 0) {
+              hour += 24 /* pass midnight, next day */
+            }
+            let min = date.getMinutes() - conquerMin
+            if(min < 0){
+              hour -= 1
+            }
+
+            if(hour > 9){
+              hour = 9
+            }
+            hour -= doc.data().hourPassed
+            this.mainuser.update({ /* update firebase variable */
+              points: this.userPoints + (hour * doc.data().hourlyBonusPoints)
+            })
+            console.log("Added " + hour + " hours of conquering bonus")
+            this.mainstation = this.afs.doc(`stations/${doc.id}`)
+            this.hourPassed = doc.data().hourPassed
+            this.mainstation.update({ /* update firebase variable */
+              hourPassed: this.hourPassed + hour
+            })
+          }
+        })
+      })
+    }
   }
 
   async showAlert(header: string, message: string) {
