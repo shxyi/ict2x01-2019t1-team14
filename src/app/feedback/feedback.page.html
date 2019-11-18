@@ -8,55 +8,60 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="customForm">
-      <br>
+  <div class = "container">
+    <img src = "../assets/icon/antigravity.jpg">
+  </div>
 
-      <h3>Safety</h3>
-      <ionic4-star-rating #rating
-        activeIcon = "ios-star"
-        defaultIcon = "ios-star-outline"
-        activeColor = "#E7F14D"
-        defaultColor = "#aaaaaa"
-        readonly = "false"
-        rating = "1"
-        fontSize = "46px"
-        (ratingChanged)="logRatingChange($event)"
-        formControlName="starRating" [(ngModel)]="safety">
-      </ionic4-star-rating>
-      <br>
+    <div class = "theform">
+        <form [formGroup]="customForm">
+          <h3>Safety</h3>
+          <ionic4-star-rating #rating
+            activeIcon = "ios-star"
+            defaultIcon = "ios-star-outline"
+            activeColor = "#E7F14D"
+            defaultColor = "#aaaaaa"
+            readonly = "false"
+            rating = "1"
+            fontSize = "35px"
+            (ratingChanged)="logRatingChange($event)"
+            formControlName="starRating" [(ngModel)]="safety">
+          </ionic4-star-rating>
+          <br>
 
-      <h3>Speed</h3>
-      <ionic4-star-rating #rating2
-        activeIcon = "ios-star"
-        defaultIcon = "ios-star-outline"
-        activeColor = "#E7F14D"
-        defaultColor = "#aaaaaa"
-        readonly = "false"
-        rating = "1"
-        fontSize = "46px"
-        (ratingChanged)="logRatingChange($event)"
-        formControlName="starRating2" [(ngModel)]="speed">
-      </ionic4-star-rating>
-      <br>
+          <h3>Speed</h3>
+          <ionic4-star-rating #rating2
+            activeIcon = "ios-star"
+            defaultIcon = "ios-star-outline"
+            activeColor = "#E7F14D"
+            defaultColor = "#aaaaaa"
+            readonly = "false"
+            rating = "1"
+            fontSize = "35px"
+            (ratingChanged)="logRatingChange($event)"
+            formControlName="starRating2" [(ngModel)]="speed">
+          </ionic4-star-rating>
+          <br>
 
-      <h3>Enjoyment</h3>
-      <ionic4-star-rating #rating3
-        activeIcon = "ios-star"
-        defaultIcon = "ios-star-outline"
-        activeColor = "#E7F14D"
-        defaultColor = "#aaaaaa"
-        readonly = "false"
-        rating = "1"
-        fontSize = "46px"
-        (ratingChanged)="logRatingChange($event)"
-        formControlName="starRating3" [(ngModel)]="enjoyment">
-      </ionic4-star-rating>
-      <br>
-      <br>
+          <h3>Enjoyment</h3>
+          <ionic4-star-rating #rating3
+            activeIcon = "ios-star"
+            defaultIcon = "ios-star-outline"
+            activeColor = "#E7F14D"
+            defaultColor = "#aaaaaa"
+            readonly = "false"
+            rating = "1"
+            fontSize = "35px"
+            (ratingChanged)="logRatingChange($event)"
+            formControlName="starRating3" [(ngModel)]="enjoyment">
+          </ionic4-star-rating>
+          <br>
+          <br>
 
-      <div class="btn">
-        <ion-button color = "primary" (click)="feedback()" [disabled]="!safety || !speed || !enjoyment"> Submit</ion-button>
-      </div>
+          <div class="btn">
+            <ion-button color = "primary" (click)="feedback()" [disabled]="!safety || !speed || !enjoyment"> Submit</ion-button>
+          </div>
+        </form>
+    </div>
 
-  </form>
+
 </ion-content>
