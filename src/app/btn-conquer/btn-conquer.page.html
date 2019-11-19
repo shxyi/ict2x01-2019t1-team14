@@ -7,16 +7,17 @@
 </ion-header>
 
 <ion-content>
-    <ion-item>
-        <ion-label position="floating">Text</ion-label>
-        <ion-input type="text" [(ngModel)]="userLocation"></ion-input>
-      </ion-item>
-    <div class="ion-padding">
-      <ion-button *ngIf="!buttonClicked" (click)="btnConquerNow()" shape="round">CONQUER NOW!</ion-button>
-    </div>
+  <ion-item>
+      <ion-label position="floating">Text</ion-label>
+      <ion-input type="text" [(ngModel)]="userLocation"></ion-input>
+    </ion-item>
   <div class="ion-padding">
-      <ion-button (click)="btnMrt()" shape="round">I would like to conquer</ion-button>
+    <ion-button *ngIf="!buttonClicked" (click)="btnConquerNow()" shape="round">CONQUER NOW!</ion-button>
   </div>
-<p>Click button to conquer!</p>
-  
+<div class="ion-padding">
+    <ion-button (click)="btnConquer()" shape="round">I would like to conquer</ion-button>
+</div>
+<div class="ion-padding">
+Click button to conquer!
+</div>
 </ion-content>

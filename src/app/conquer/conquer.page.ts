@@ -9,7 +9,7 @@ import { AlertController } from '@ionic/angular'; /* import pop up modal alert *
   styleUrls: ['./conquer.page.scss'],
 })
 export class ConquerPage implements OnInit {
-  userPoints: Number
+  userPoints: Number //get from firebase
 
   constructor(public router: Router,
     public alert: AlertController) { }
