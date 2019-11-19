@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Password Reset</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-buttons slot="start">
+    <ion-back-button  defaultHref="/"></ion-back-button>
+</ion-buttons>
+
+<ion-content padding>
+  <div padding>
+    <h3>Forget Password?</h3>
+
+    <div>
+      <p> Please enter your registered email address below: </p>
+    </div>
+
+    <ion-item>
+        <ion-input placeholder="Email" type="text" [(ngModel)]= "email"></ion-input>
+    </ion-item>
+
+    <div>
+      <ion-button expand="block" color="warning" (click) ='resetpw()'>Reset Password</ion-button>
+    </div>
+
+  </div>
+</ion-content>
