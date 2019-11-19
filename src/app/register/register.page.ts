@@ -53,19 +53,19 @@ export class RegisterPage implements OnInit {
 
     const errorAlert = await this.alertController.create({
         header: "Error!",
-        message: "Password does not match",
+        message: "Password does not match.",
         buttons: ['OK']
       })
 
       const successAlert = await this.alertController.create({
         header: "Success!",
-        message: "Registration is successful! You may now login",
+        message: "Registration is successful! You may now login.",
         buttons: ['OK']
       })
 
       const errorEAlert = await this.alertController.create({
           header: "Error!",
-          message: "Invalid details",
+          message: "Invalid details.",
           buttons: ['OK']
         })
 
