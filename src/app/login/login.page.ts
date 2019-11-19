@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
       })
 
       const emailErrorAlert = await this.alertController.create({
-          header: "-Notice!-",
+          header: "-Notice-",
           message: "Please verify your email.",
           buttons: ['OK']
         })
@@ -67,6 +67,7 @@ export class LoginPage implements OnInit {
     }
   }
 
+
   sendEmailVerification(){
   this.afAuth.authState.subscribe(user =>{
     user.sendEmailVerification().then(() => {
@@ -77,5 +78,9 @@ export class LoginPage implements OnInit {
 
   async goRegister() {
     this.router.navigate(['register'])
+  }
+
+  async goReset() {
+    this.router.navigate(['forgetpw'])
   }
 }
