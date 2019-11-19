@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
       })
 
       const emailErrorAlert = await this.alertController.create({
-          header: "Error!",
+          header: "-Notice!-",
           message: "Please verify your email.",
           buttons: ['OK']
         })
