@@ -6,6 +6,8 @@ import { Subscription  } from 'rxjs/Subscription';
 import { Storage } from '@ionic/storage';
 import { NavController, Platform } from '@ionic/angular';
 import { filter } from 'rxjs/operators';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Marker, MarkerOptions, LatLng } from '@ionic-native/google-maps';
 
 declare var google;
 
@@ -22,8 +24,18 @@ export class HomePage implements OnInit, AfterContentInit {
     directionsDisplay = new google.maps.DirectionsRenderer; //display direction in map
     directionForm: FormGroup;   //get input value from user
     currentLocation: any = {
-        lat: 0,
-        lng: 0
+        lat: "",
+        lng: "",
+        accuracy: ""
+
+    }
+
+    createMarker(loc: LatLng, title: string) {
+        let markerOptions: MarkerOptions = {
+            position: loc,
+            title: title
+        };
+        return this.map.addMarker(markerOptions);
     }
 
     isTracking = false;
@@ -32,7 +44,7 @@ export class HomePage implements OnInit, AfterContentInit {
 
     positionSubscription: Subscription;
 
-    constructor(public navCtrl: NavController, private plt: Platform, private fb: FormBuilder, private geolocation: Geolocation, private storage: Storage) {
+    constructor(public navCtrl: NavController, private plt: Platform, private fb: FormBuilder, private geolocation: Geolocation, private storage: Storage, private locationAccuracy: LocationAccuracy) {
         this.createDirectionForm();
     }
 
@@ -50,7 +62,7 @@ export class HomePage implements OnInit, AfterContentInit {
 
             this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-            this.geolocation.getCurrentPosition().then(pos => {
+            this.geolocation.getCurrentPosition().then((pos) => {
                 let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
                 this.map.setCentre(latLng);
                 this.map.setZoom(15);
@@ -78,21 +90,40 @@ export class HomePage implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
+
+        this.geolocation.getCurrentPosition().then((resp) => {
+            this.currentLocation.lat = resp.coords.latitude;
+            this.currentLocation.lng = resp.coords.longitude;
+            this.currentLocation.accuracy = resp.coords.accuracy;
+
+            this.map = new google.maps.Map(this.mapElement.nativeElement, {
+                zoom: 15,
+                center: { lat: resp.coords.latitude, lng: resp.coords.longitude }
+            });
+
+            this.createMarker(this.currentLocation, "Me").then((marker: Marker) => {
+                marker.showInfoWindow();
+            });
+        });
+
+        //const mapOptions = new google.maps.Map(this.mapElement.nativeElement, {
+         //   zoom: 15,
+        //    center: this.currentLocation
+        //});
+
+       // this.directionsDisplay.setMap(this.map);     
+
+    }
+
+    generateRoutes(formValues) {
         this.geolocation.getCurrentPosition().then((resp) => {
             this.currentLocation.lat = resp.coords.latitude;
             this.currentLocation.lng = resp.coords.longitude;
         });
-        const mapOptions = new google.maps.Map(this.mapElement.nativeElement, {
+   
+        this.map = new google.maps.Map(this.mapElement.nativeElement, {
             zoom: 11.5,
-            center: { lat: 1.3227352, lng: 103.8143577 }
-        });
-        this.directionsDisplay.setMap(this.map);
-    }
-
-    generateRoutes(formValues) {
-        const mapOptions = new google.maps.Map(this.mapElement.nativeElement, {
-            zoom: 11.5,
-            center: { lat: 1.3227352, lng: 103.8143577 }
+            center: this.currentLocation//{ lat: 1.3227352, lng: 103.8143577 }
         });
 
       
@@ -106,7 +137,7 @@ export class HomePage implements OnInit, AfterContentInit {
             if (status === 'OK') {                   
                 for (var i = 0, len = response.routes.length; i < len; i++) {                  
                     new google.maps.DirectionsRenderer({                        //display routes
-                        map: mapOptions,
+                        map: this.map,
                         directions: response,
                         routeIndex: i                       
                     });
@@ -130,7 +161,7 @@ export class HomePage implements OnInit, AfterContentInit {
                 setTimeout(() => {
                     this.trackedRoute.push({ lat: data.coords.latitude, lng: data.coords.longitude });
                     this.redrawPath(this.trackedRoute);
-                }, 0);
+                });
             });
 
     }

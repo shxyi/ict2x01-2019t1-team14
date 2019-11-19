@@ -23,14 +23,14 @@
         <ion-button expand="full" type="submit" [disabled]="directionForm.invalid">Get Direction</ion-button>
     </form>
 
-    <button ion-button full icon-left (click)="startTracking()" *ngIf="!isTracking">
+    <ion-button full icon-left (click)="startTracking()" *ngIf="!isTracking">
         <ion-icon name="locate"></ion-icon>
         Start Tracking
-    </button>
-    <button ion-button full color="danger" icon-left (click)="stopTracking()" *ngIf="isTracking">
+    </ion-button>
+    <ion-button full color="danger" icon-left (click)="stopTracking()" *ngIf="isTracking">
         <ion-icon name="hand"></ion-icon>
         Stop Tracking
-    </button>
+    </ion-button>
 
     <div #mapElement class="map"></div>
 
