@@ -29,33 +29,18 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  // testPassword() {
-  //   bool testPassword = testPassword("password123", password.database)
-  //   return testPassword
-  // } // return false as password entered does not match the password in database
-  //
-  // testVerified() {
-  //   bool testVerified = testVerified("ict2101@gmail.com")
-  //   return testVerified
-  // } // return true as email is verified
-  //
-  // testVerified2() {
-  //   bool testVerified = testVerified("ict1234@gmail.com")
-  //   return testVerified
-  // } // return false as email is not verified yet
-
   async verifyLogin(){
     const {email, password } = this
 
     const errorAlert = await this.alertController.create({
-        header: "Error",
-        message: "Invalid login details",
+        header: "Error!",
+        message: "Invalid login details.",
         buttons: ['OK']
       })
 
       const emailErrorAlert = await this.alertController.create({
-          header: "Error",
-          message: "Please verify your email",
+          header: "Error!",
+          message: "Please verify your email.",
           buttons: ['OK']
         })
 
@@ -81,7 +66,6 @@ export class LoginPage implements OnInit {
       await errorAlert.present()
     }
   }
-
 
   sendEmailVerification(){
   this.afAuth.authState.subscribe(user =>{
