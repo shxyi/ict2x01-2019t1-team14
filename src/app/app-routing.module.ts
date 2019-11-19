@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'edit-profile', loadChildren: './edit-profile/edit-profile.module#EditProfilePageModule' },
   { path: 'forget-password', loadChildren: './forget-password/forget-password.module#ForgetPasswordPageModule' },
+  { path: 'shake-dice', loadChildren: './shake-dice/shake-dice.module#ShakeDicePageModule' },
 ];
 
 @NgModule({

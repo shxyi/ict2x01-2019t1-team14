@@ -21,7 +21,7 @@ export class SanyinRoutePage implements OnInit {
   hourPassed: number
   userPoints: number
   conquerDuration = 9 /* hours */
-  debugging = !true /* debugger */
+  debugging = !false /* debugger */
   atStation = !false
 
   constructor(

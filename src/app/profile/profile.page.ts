@@ -3,7 +3,6 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { UserService } from '../user.service';
 import { Router } from '@angular/router' /* import page navigation */
 import { AngularFireAuth } from '@angular/fire/auth'; /* import from app.module.ts */
-import * as firebase from "firebase"
 
 @Component({
   selector: 'app-profile',

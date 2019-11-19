@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Profile</ion-title>
+      <ion-row>
+        <ion-title class="ion-float-left">Profile</ion-title>
+        <ion-img id="logout-icon" src="../assets/icon/logout.png" class="ion-float-right" (click)="logOut()"></ion-img>
+      </ion-row>
   </ion-toolbar>
 </ion-header>
 
@@ -36,6 +39,5 @@
     </ion-item>
   
     <ion-button id="button" fill="solid" expand="block" (click)="editProfile()">Edit Profile</ion-button>
-    <ion-button fill="solid" expand="block" (click)="logOut()">Log Out</ion-button>
   </div>
 </ion-content>
