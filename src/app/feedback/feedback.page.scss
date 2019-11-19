@@ -1,11 +1,14 @@
-.container {
-  position: relative;
-}
+.bg {
+  /* The image used */
+  background-image: url("/assets/icon/antigravity.jpg");
 
-img{
-  width: 100%;
-  height: auto;
-  margin: auto;
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  position: relative;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .theform {
@@ -28,6 +31,7 @@ h3{
   font-size: 15px;
   text-align: center;
   font-weight: bold;
+  color: #001343;
 }
 
 ionic4-star-rating{

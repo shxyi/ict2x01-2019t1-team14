@@ -58,7 +58,7 @@ export class FeedbackPage {
     async feedbackSubmit() {
       const feedbackAlert = await this.alertController.create({
         header: "Success!",
-        message: "Feedback has been submitted.",
+        message: "Your feedback has been submitted.",
         buttons: ['OK']
       })
 
