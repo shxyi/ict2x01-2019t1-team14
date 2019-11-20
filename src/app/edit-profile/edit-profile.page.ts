@@ -34,12 +34,12 @@ export class EditProfilePage implements OnInit {
   ) {
     this.mainuser = afs.doc(`users/${user.getUID()}`)
 		this.sub = this.mainuser.valueChanges().subscribe(event => {
-      this.firebaseUsername = event.username
-      this.firebasePassword = event.password
-      this.firebaseCommuteMethod = event.commuteMethod
-      this.firebaseGender = event.gender
-      this.firebaseAge = event.age
-      this.firebaseEmail = event.email
+      this.username = this.firebaseUsername = event.username
+      this.password = this.firebasePassword = event.password
+      this.commuteMethod = this.firebaseCommuteMethod = event.commuteM
+      this.gender = this.firebaseGender = event.gender
+      this.age = this.firebaseAge = event.age
+      this.email = this.firebaseEmail = event.email
     })
   }
 
@@ -52,6 +52,12 @@ export class EditProfilePage implements OnInit {
       this.showAlert("Error", "One or more fields are empty.")
       return
     }
+    else if(this.username==this.firebaseUsername && this.password==this.firebasePassword && this.commuteMethod==this.firebaseCommuteMethod &&
+      this.gender==this.firebaseGender && this.age==this.firebaseAge && this.email==this.firebaseEmail){
+      this.showAlert("System Message", "You have change nothing.")
+      this.router.navigate(['/tabs/profile'])
+      return
+    }
 
     if(this.cpassword !== ""){
       if(this.password !== this.cpassword){
@@ -62,7 +68,6 @@ export class EditProfilePage implements OnInit {
 
     /* update profile */
     if(this.username !== this.firebaseUsername) {
-			//await this.user.updateEmail(this.username) /* update account username(email) */
 			this.mainuser.update({ /* update firebase variable */
 				username: this.username
 			})
@@ -93,10 +98,17 @@ export class EditProfilePage implements OnInit {
 			})
     }
     
-    if(this.email !== this.user.getEmail()) {
-      this.mainuser.update({ /* update firebase variable */
-				email: this.email
-			})
+    if(this.email !== this.firebaseEmail) {
+      if(this.email.includes('@')) {
+        await this.user.updateEmail(this.email) /* update account username(email) */
+        this.mainuser.update({ /* update firebase variable */
+          email: this.email
+        })
+      }
+      else {
+        this.showAlert("Error", "Email is in the wrong format.")
+        return
+      }
     }
 
     this.showAlert("Success", "Update successfully.")
