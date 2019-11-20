@@ -44,12 +44,14 @@ export class RegisterPage implements OnInit {
     age: string = ""
     gender:string = ""
     commuteM: string = ""
+    points: number = 0
+    stationConquered: string = ""
 
 	ngOnInit() {
 	}
 
   async verifyRegister() {
-    const { username, password, cpassword, email, age, gender, commuteM } = this
+    const { username, password, cpassword, email, age, gender, commuteM, points, stationConquered } = this
 
     const errorAlert = await this.alertController.create({
         header: "Error!",
@@ -78,7 +80,7 @@ export class RegisterPage implements OnInit {
         const res = await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
 
         this.afstore.doc(`users/${res.user.uid}`).set({
-          username, password, email, age, gender, commuteM
+          username, password, email, age, gender, commuteM, points, stationConquered
         })
 
         this.user.setUser ({

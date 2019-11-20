@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="person"></ion-icon> Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username" placeholder="{{ firebaseUsername }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="lock"></ion-icon> Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password" placeholder="{{ firebasePassword }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="lock"></ion-icon> Confirm Password</ion-label>
+      <ion-input type="password" [(ngModel)]="cpassword"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="mail"></ion-icon> Email</ion-label>
+      <ion-input type="text" [(ngModel)]="email" placeholder="{{ firebaseEmail }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="contacts"></ion-icon> Gender</ion-label>
+      <ion-select [(ngModel)]="gender">
+        <ion-select-option value="male">Male</ion-select-option>
+        <ion-select-option value="female">Female</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="calendar"></ion-icon> Age</ion-label>
+      <ion-input type="number" [(ngModel)]="age" placeholder="{{ firebaseAge }}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="walk"></ion-icon> Commute Method</ion-label>
+      <ion-select [(ngModel)]="commuteMethod">
+        <ion-select-option value="walking">Walking</ion-select-option>
+        <ion-select-option value="wheelchair">Wheelchair</ion-select-option>
+        <ion-select-option value="pram">Pram</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button id="button" fill="solid" expand="block" (click)="updateProfile()">Update Profile</ion-button>
+  </ion-list>
+</ion-content>

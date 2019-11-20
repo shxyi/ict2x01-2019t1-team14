@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-row>
+          <ion-title class="ion-float-left">Leaderboard</ion-title>
+          <ion-img id="refresh-icon" src="../assets/icon/refresh.png" class="ion-float-right" (click)="refresh()"></ion-img>
+      </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="border">
+    <ion-img id="trophy" src="../assets/icon/trophy.png"></ion-img>
+  </div>
+  <div padding>
+    <div id="blank"></div>
+    <ion-row>
+      <ion-col><b>Rank</b></ion-col>
+      <ion-col><b>Username</b></ion-col>
+      <ion-col><b>Points</b></ion-col>
+    </ion-row>
+    <ion-grid id="grid">
+    </ion-grid>
+    
+    <ion-img id="avatar" [src]="avatar"></ion-img>
+    <p class="center"><b>Points:</b> {{ points }}</p>
+    <p class="center"><b>Station Conquered:</b> {{ stationConquered }}</p>
+
+    <!-- debugger -->
+    <ion-button class="debugging" [hidden]="debugging" color="dark" (click)="addPoints()">Add Points</ion-button>
+    <ion-button class="debugging" [hidden]="debugging" color="dark" (click)="deductPoints()">Deduct Points</ion-button>
+  </div>
+</ion-content>
