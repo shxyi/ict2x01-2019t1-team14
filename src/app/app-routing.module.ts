@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'conquer', loadChildren: './conquer/conquer.module#ConquerPageModule' },
   { path: 'btn-conquer', loadChildren: './btn-conquer/btn-conquer.module#BtnConquerPageModule' },
   { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  { path: 'forgetpw', loadChildren: './forgetpw/forgetpw.module#ForgetpwPageModule' },
   { path: 'edit-profile', loadChildren: './edit-profile/edit-profile.module#EditProfilePageModule' },
 ];
 
