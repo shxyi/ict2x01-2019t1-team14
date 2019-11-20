@@ -27,11 +27,11 @@ export class RegisterPage implements OnInit {
     public afstore: AngularFirestore
   ) {
     this.loginForm = formBuilder.group({
-            username: ['', Validators.compose([Validators.maxLength(25), Validators.required, Validators.pattern('[a-zA-Z]*')])],
-            password: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
-            cpassword: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            username: ['', Validators.compose([Validators.required, Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')])],
+            password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            cpassword: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16),  Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
             email: ['', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])],
-            age: ['', Validators.required],
+            age: ['',  AgeValidator.isValid],
             gender: ['', Validators.required],
             commuteM: ['', Validators.required],
         });
@@ -44,14 +44,12 @@ export class RegisterPage implements OnInit {
     age: string = ""
     gender:string = ""
     commuteM: string = ""
-    points: number = 0
-    stationConquered: string = ""
 
 	ngOnInit() {
 	}
 
   async verifyRegister() {
-    const { username, password, cpassword, email, age, gender, commuteM, points, stationConquered } = this
+    const { username, password, cpassword, email, age, gender, commuteM } = this
 
     const errorAlert = await this.alertController.create({
         header: "Error!",
@@ -80,7 +78,7 @@ export class RegisterPage implements OnInit {
         const res = await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.password)
 
         this.afstore.doc(`users/${res.user.uid}`).set({
-          username, password, email, age, gender, commuteM, points, stationConquered
+          username, password, email, age, gender, commuteM
         })
 
         this.user.setUser ({
@@ -97,31 +95,37 @@ export class RegisterPage implements OnInit {
       }
     }
   }
+}
 
-  public isValid(control: FormControl): any {
+export class AgeValidator {
+
+    static isValid(control: FormControl): any {
 
         if(isNaN(control.value)){
             return {
-                "not a number": true
+                "Not a number": true
             };
         }
 
         if(control.value % 1 !== 0){
             return {
-                "not a whole number": true
+                "Not a whole number": true
             };
         }
 
-        if(control.value < 10){
+        if(control.value < 8){
             return {
-                "too young": true
+                "Too young": true
             };
         }
 
-        if (control.value > 100){
+        if (control.value > 90){
             return {
-                "not realistic": true
+                "Not realistic": true
             };
-          }
-      }
+        }
+
+        return null;
+    }
+
 }
