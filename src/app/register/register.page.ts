@@ -27,11 +27,11 @@ export class RegisterPage implements OnInit {
     public afstore: AngularFirestore
   ) {
     this.loginForm = formBuilder.group({
-            username: ['', Validators.compose([Validators.maxLength(25), Validators.required, Validators.pattern('[a-zA-Z]*')])],
-            password: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
-            cpassword: ['', Validators.compose([Validators.minLength(8), Validators.maxLength(16), Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            username: ['', Validators.compose([Validators.required, Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')])],
+            password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
+            cpassword: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16),  Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
             email: ['', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])],
-            age: ['', Validators.required],
+            age: ['',  AgeValidator.isValid],
             gender: ['', Validators.required],
             commuteM: ['', Validators.required],
         });
@@ -97,31 +97,37 @@ export class RegisterPage implements OnInit {
       }
     }
   }
+}
 
-  public isValid(control: FormControl): any {
+export class AgeValidator {
 
-        if(isNaN(control.value)){
-            return {
-                "not a number": true
-            };
-        }
+	static isValid(control: FormControl): any {
 
-        if(control.value % 1 !== 0){
-            return {
-                "not a whole number": true
-            };
-        }
+		if(isNaN(control.value)){
+			return {
+				"Not a number": true
+			};
+		}
 
-        if(control.value < 10){
-            return {
-                "too young": true
-            };
-        }
+		if(control.value % 1 !== 0){
+			return {
+				"Not a whole number": true
+			};
+		}
 
-        if (control.value > 100){
-            return {
-                "not realistic": true
-            };
-          }
-      }
+		if(control.value < 8){
+			return {
+				"Too young": true
+			};
+		}
+
+		if (control.value > 90){
+			return {
+				"Not realistic": true
+			};
+		}
+
+		return null;
+	}
+
 }
