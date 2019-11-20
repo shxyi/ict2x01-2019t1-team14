@@ -45,17 +45,16 @@ export class ForgetpwPage implements OnInit {
       await alert.present()
     }
 
-  async resetpw(){
+  resetpw(){
 
-      try {
-      this.afAuth.auth.sendPasswordResetEmail(this.email).then(function () {
-        })
-
-        this.successAlert()
-        this.router.navigate(['login']);
-      }
-      catch(error) {
-        this.errorAlert()
-      }
-    }
-  }
+     this.afAuth.auth.sendPasswordResetEmail(this.email).then(data => {
+       console.log(data)
+       console.log("success")
+       this.successAlert()
+       this.router.navigate(['login']);
+     }) .catch(err =>{
+       console.log("fail");
+       this.errorAlert();
+     });
+   }
+ }

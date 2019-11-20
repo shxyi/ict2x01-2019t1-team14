@@ -21,7 +21,7 @@
     </ion-item>
 
     <div>
-      <ion-button expand="block" color="warning" (click) ='resetpw()'>Reset Password</ion-button>
+      <ion-button expand="block" color="warning" [disabled]="!email" (click) ='resetpw()'>Reset Password</ion-button>
     </div>
 
   </div>
