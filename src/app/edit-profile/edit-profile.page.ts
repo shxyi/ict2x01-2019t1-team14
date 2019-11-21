@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
 import { Router } from '@angular/router' /* import page navigation */
-import { FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular'; /* import pop up modal alert */
 
 @Component({
   selector: 'app-edit-profile',
@@ -11,9 +10,6 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./edit-profile.page.scss'],
 })
 export class EditProfilePage implements OnInit {
-
-  public loginForm: FormGroup;
-
   mainuser: AngularFirestoreDocument
   sub
   username: string = ""
@@ -34,29 +30,17 @@ export class EditProfilePage implements OnInit {
     private afs: AngularFirestore,
     private user: UserService,
     public router: Router,
-    public formBuilder: FormBuilder,
     public alert: AlertController,
   ) {
-      this.mainuser = afs.doc(`users/${user.getUID()}`)
-  		this.sub = this.mainuser.valueChanges().subscribe(event => {
-        this.firebaseUsername = event.username
-        this.firebasePassword = event.password
-        this.firebaseCommuteMethod = event.commuteMethod
-        this.firebaseGender = event.gender
-        this.firebaseAge = event.age
-        this.firebaseEmail = event.email
-      })
-
-      this.loginForm = formBuilder.group({
-        username: ['', Validators.compose([Validators.required, Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')])],
-        password: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
-        cpassword: ['', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(16),  Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])],
-        email: ['', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')])],
-        age: ['',  AgeValidator.isValid],
-        gender: ['', Validators.required],
-        commuteMethod: ['', Validators.required],
-    });
-
+    this.mainuser = afs.doc(`users/${user.getUID()}`)
+		this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.username = this.firebaseUsername = event.username
+      this.password = this.firebasePassword = event.password
+      this.commuteMethod = this.firebaseCommuteMethod = event.commuteM
+      this.gender = this.firebaseGender = event.gender
+      this.age = this.firebaseAge = event.age
+      this.email = this.firebaseEmail = event.email
+    })
   }
 
   ngOnInit() {
@@ -66,6 +50,12 @@ export class EditProfilePage implements OnInit {
     /* validation */
     if(this.username=="" || this.password=="" || this.commuteMethod==null || this.gender==null || this.age==null || this.email==""){
       this.showAlert("Error", "One or more fields are empty.")
+      return
+    }
+    else if(this.username==this.firebaseUsername && this.password==this.firebasePassword && this.commuteMethod==this.firebaseCommuteMethod &&
+      this.gender==this.firebaseGender && this.age==this.firebaseAge && this.email==this.firebaseEmail){
+      this.showAlert("System Message", "You have change nothing.")
+      this.router.navigate(['/tabs/profile'])
       return
     }
 
@@ -78,7 +68,6 @@ export class EditProfilePage implements OnInit {
 
     /* update profile */
     if(this.username !== this.firebaseUsername) {
-			//await this.user.updateEmail(this.username) /* update account username(email) */
 			this.mainuser.update({ /* update firebase variable */
 				username: this.username
 			})
@@ -108,15 +97,22 @@ export class EditProfilePage implements OnInit {
 				age: this.age
 			})
     }
-
-    if(this.email !== this.user.getEmail()) {
-      this.mainuser.update({ /* update firebase variable */
-				email: this.email
-			})
+    
+    if(this.email !== this.firebaseEmail) {
+      if(this.email.includes('@')) {
+        await this.user.updateEmail(this.email) /* update account username(email) */
+        this.mainuser.update({ /* update firebase variable */
+          email: this.email
+        })
+      }
+      else {
+        this.showAlert("Error", "Email is in the wrong format.")
+        return
+      }
     }
 
     this.showAlert("Success", "Update successfully.")
-    this.router.navigate(['/tabs/profile'])
+    this.router.navigate(['/tabs/direction'])
   }
 
   async showAlert(header: string, message: string) {
@@ -127,37 +123,4 @@ export class EditProfilePage implements OnInit {
     })
     await alert.present()
   }
-}
-
-export class AgeValidator {
-
-	static isValid(control: FormControl): any {
-
-		if(isNaN(control.value)){
-			return {
-				"Not a number": true
-			};
-		}
-
-		if(control.value % 1 !== 0){
-			return {
-				"Not a whole number": true
-			};
-		}
-
-		if(control.value < 8){
-			return {
-				"Too young": true
-			};
-		}
-
-		if (control.value > 90){
-			return {
-				"Not realistic": true
-			};
-		}
-
-		return null;
-	}
-
 }

@@ -8,70 +8,48 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="loginForm">
-
+  <ion-list>
     <ion-item>
       <ion-label position="floating"><ion-icon name="person"></ion-icon> Username</ion-label>
-      <ion-input type="text" placeholder="{{ firebaseUsername }}" [(ngModel)] = "username" formControlName="username" [class.invalid]="!loginForm.controls.username.valid && loginForm.controls.username.dirty"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="!loginForm.controls.username.valid  && (loginForm.controls.username.dirty)">
-    <h6 style="color:red;">Your username must contain only alphabet.</h6>
+      <ion-input type="text" [(ngModel)]="username" placeholder="{{ firebaseUsername }}"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating"><ion-icon name="lock"></ion-icon> Password</ion-label>
-      <ion-input type="password" [(ngModel)] = "password" formControlName="password" [class.invalid]="!loginForm.controls.password.valid && loginForm.controls.password.dirty" placeholder="{{ firebasePassword }}"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="!loginForm.controls.password.valid  && (loginForm.controls.password.dirty)">
-    <h6 style="color:red;">Your password must contain at least 1 uppercase, 1 lowercase, 1 number and 8 characters long.</h6>
+      <ion-input type="password" [(ngModel)]="password" placeholder="{{ firebasePassword }}"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating"><ion-icon name="lock"></ion-icon> Confirm Password</ion-label>
-      <ion-input type="password" [(ngModel)] = "cpassword" formControlName="cpassword" [class.invalid]="!loginForm.controls.cpassword.valid && loginForm.controls.cpassword.dirty"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="!loginForm.controls.cpassword.valid  && (loginForm.controls.cpassword.dirty)">
-    <h6 style="color:red;">Your password must contain at least 1 uppercase, 1 lowercase, 1 number and 8 characters long.</h6>
+      <ion-input type="password" [(ngModel)]="cpassword"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-icon name="mail"></ion-icon>
-      <ion-input placeholder="{{ firebaseEmail }}" type="email" [(ngModel)]= "email" formControlName="email" ></ion-input>
+      <ion-label position="floating"><ion-icon name="mail"></ion-icon> Email</ion-label>
+      <ion-input type="text" [(ngModel)]="email" placeholder="{{ firebaseEmail }}"></ion-input>
     </ion-item>
 
-    <ion-item *ngIf="!loginForm.controls.email.valid  && (loginForm.controls.email.dirty)">
-    <h6 style="color:red;">Please enter a valid email.</h6>
+    <ion-item>
+      <ion-label position="floating"><ion-icon name="contacts"></ion-icon> Gender</ion-label>
+      <ion-select [(ngModel)]="gender">
+        <ion-select-option value="Male">Male</ion-select-option>
+        <ion-select-option value="Female">Female</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating"><ion-icon name="calendar"></ion-icon> Age</ion-label>
-      <ion-input type="number" [(ngModel)] = "age" formControlName="age" [class.invalid]="!loginForm.controls.age.valid && loginForm.controls.age.dirty" placeholder="{{ firebaseAge }}"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="!loginForm.controls.age.valid  && (loginForm.controls.age.dirty)">
-    <h6 style="color:red;">Please enter a valid age that is within 8 to 90. </h6>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="man"></ion-icon><ion-label>Gender</ion-label>
-        <ion-select placeholder="Select One" [(ngModel)]="gender" formControlName="gender" [class.invalid]="!loginForm.controls.gender.valid && loginForm.controls.gender.dirty">
-          <ion-select-option value="f">Female</ion-select-option>
-          <ion-select-option value="m">Male</ion-select-option>
-        </ion-select>
+      <ion-input type="number" [(ngModel)]="age" placeholder="{{ firebaseAge }}"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="floating"><ion-icon name="walk"></ion-icon> Commute Method</ion-label>
-      <ion-select [(ngModel)]="commuteMethod" [(ngModel)]="commuteMethod" formControlName="commuteMethod" [class.invalid]="!loginForm.controls.commuteMethod.valid && loginForm.controls.commuteMethod.dirty">
-        <ion-select-option value="walking">Walking</ion-select-option>
-        <ion-select-option value="wheelchair">Wheelchair</ion-select-option>
-        <ion-select-option value="pram">Pram</ion-select-option>
+      <ion-select [(ngModel)]="commuteMethod">
+        <ion-select-option value="Walking">Walking</ion-select-option>
+        <ion-select-option value="Others">Others</ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-button id="button" fill="solid" expand="block" (click)="updateProfile()">Update Profile</ion-button>
-  </form>
+  </ion-list>
 </ion-content>
