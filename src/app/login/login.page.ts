@@ -49,7 +49,7 @@ export class LoginPage implements OnInit {
       this.password = "Qscmlp753"
       const res = await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.password)
       if(res.user.emailVerified) {
-        this.router.navigate(['feedback'])
+        this.router.navigate(['tabs/direction'])
       }
       else {
         await emailErrorAlert.present();
