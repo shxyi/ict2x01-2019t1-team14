@@ -6,7 +6,7 @@ const routes: Routes = [{
     path: '', /* default */
     component: TabsPage, 
     children: [
-        { path: '', redirectTo: 'leaderboard', pathMatch: 'full' },
+        { path: '', redirectTo: 'direction', pathMatch: 'full' },
         { path: 'direction', loadChildren: '../direction/direction.module#DirectionPageModule' },
         { path: 'leaderboard', loadChildren: '../leaderboard/leaderboard.module#LeaderboardPageModule' },
         { path: 'profile', loadChildren: '../profile/profile.module#ProfilePageModule' },
