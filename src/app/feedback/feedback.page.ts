@@ -49,7 +49,7 @@ export class FeedbackPage {
       this.enjoyment = 0;
       this.routeID = "";
       this.feedbackSubmit();
-      this.router.navigate(['direction']);
+      this.router.navigate(['shake-dice']);
     })
       .catch(error => {
       });

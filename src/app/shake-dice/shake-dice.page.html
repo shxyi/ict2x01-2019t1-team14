@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Feedback Bonus</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div id="dice-container">
+    <ion-img (click)="diceRoll()" src="../assets/icon/0.png"></ion-img>
+  </div>
+
+  <p [hidden]="hide">
+    You have rolled a <u>{{ multiplier }}</u><br><br>
+    Total points earned:<br>
+    {{ feedbackPts }} x <u>{{ multiplier }}</u> = <b>{{ totalPts }}</b>
+  </p>
+
+  <ion-button [hidden]="hide" (click)="home()">Okay</ion-button>
+</ion-content>

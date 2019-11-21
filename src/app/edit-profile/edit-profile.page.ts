@@ -112,7 +112,7 @@ export class EditProfilePage implements OnInit {
     }
 
     this.showAlert("Success", "Update successfully.")
-    this.router.navigate(['/tabs/profile'])
+    this.router.navigate(['/tabs/direction'])
   }
 
   async showAlert(header: string, message: string) {
