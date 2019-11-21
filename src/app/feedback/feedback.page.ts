@@ -20,6 +20,21 @@ export class FeedbackPage {
     public alertController: AlertController,
     public starRate: UserService,
   ) {}
+  
+  logRatingChange(rating){
+        console.log("changed rating: ",rating);
+        // do your stuff
+    }
+
+    logRatingChange2(rating){
+        console.log("changed rating2: ",rating);
+        // do your stuff
+    }
+
+    logRatingChange3(rating){
+        console.log("changed rating3: ",rating);
+        // do your stuff
+    }
 
   ngOnInit() {
 
