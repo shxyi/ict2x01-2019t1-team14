@@ -45,8 +45,8 @@ export class LoginPage implements OnInit {
         })
 
     try {
-      this.email = "chu_han93@hotmail.com"
-      this.password = "Qscmlp753"
+      this.email = "chu_han93@hotmail.com" /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+      this.password = "Qscmlp753" /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
       const res = await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.password)
       if(res.user.emailVerified) {
         this.router.navigate(['tabs/direction'])

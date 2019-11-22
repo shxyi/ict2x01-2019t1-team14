@@ -9,16 +9,31 @@
 <ion-content>
 
   <form [formGroup]="directionForm" (ngSubmit)="calculateAndDisplayRoute(directionForm.value)">
-    <ion-item>
+    <ion-item [hidden]="hide">
       <ion-label position="floating">Source</ion-label>
       <ion-input formControlName="source"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item [hidden]="hide">
       <ion-label position="floating">Destination</ion-label>
       <ion-input formControlName="destination"></ion-input>
     </ion-item>
-    <ion-button expand="full" type="submit" [disabled]="directionForm.invalid">Get Direction</ion-button>
+    <ion-button id="dirBtn" expand="full" type="submit" (click)="directionButton()" [disabled]="directionForm.invalid">Get Direction</ion-button>
   </form>
 
   <div #mapElement class="map"></div>
+
+  <!-- debugger -->
+  <ion-row [hidden]="debugging">
+    <ion-col><b>Current Location:</b></ion-col>
+    <ion-col id="currentLocation"></ion-col>
+  </ion-row>
+
+  <div [hidden]="atStation" (click)="conquer()" id="img-container">
+    <ion-img src="../assets/icon/conquer.png"></ion-img>
+    <p><b>Conquer</b></p>
+  </div>
+
+  <ion-button class="debugging" [hidden]="debugging" color="dark" (click)="otherLocation()">Other Location</ion-button>
+  <ion-button class="debugging" [hidden]="debugging" color="dark" (click)="yiochukang()">Yio Chu Kang</ion-button>
+  <ion-button class="debugging" [hidden]="debugging" color="dark" (click)="angmokio()">Ang Mo Kio</ion-button>
 </ion-content>
