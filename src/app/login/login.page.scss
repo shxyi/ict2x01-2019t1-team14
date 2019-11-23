@@ -1,1 +1,41 @@
+/* Small devices such as phone */
+@media (max-width: 567px) {
+  .bg{
+      background-image: url("/assets/icon/background.jpg");
 
+      /* Full height */
+      height: 100%;
+
+      /* Center and scale the image nicely */
+      position: relative;
+      background-repeat: no-repeat;
+      background-size: cover;
+  }
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .container {
+    min-width: 80%;
+    height: auto;
+    background-color:#FFFFFF;
+    box-shadow: 2px 2px 8px #C3C3C3;
+
+    margin: 0 auto;
+    padding: 10px 20px;
+    margin-top: 40px;
+
+
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+  }
+
+}

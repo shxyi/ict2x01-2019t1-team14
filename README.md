@@ -2,6 +2,7 @@
 * [Introduction](#Introduction)
 * [Prerequisites](#Prerequisites)
 * [Installation](#Installation)
+* [Component Diagram](#Component-Diagram)
 * [Showcase Video](#Showcase-Video)
 * [Feedback Link](#Feedback-Link)
 * [Contributors](#Contributors)
@@ -28,6 +29,9 @@ A step by step series of examples that tell you how to get the application runni
 4. Update the latest Cordova version by typing "npm i -g cordova@latest"
 5. To run the application, type "ionic serve --lab". Wait for a moment and it will open up and run on Google Chrome
 ```
+
+## Component Diagram
+
 
 ## Showcase Video
 
