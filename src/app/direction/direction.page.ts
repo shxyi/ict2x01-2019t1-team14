@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { NavController, Platform } from '@ionic/angular';
 import { filter } from 'rxjs/operators';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Marker, MarkerOptions, LatLng } from '@ionic-native/google-maps';
 import { Geofence } from '@ionic-native/geofence/ngx';
 
@@ -71,7 +72,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
     private plt: Platform,
     private geolocation: Geolocation,
     private storage: Storage,
-    private geofence: Geofence,
+    //private geofence: Geofence,
     public navCtrl: NavController,) {
       this.mainuser = afs.doc(`users/${user.getUID()}`)
       this.usersub = this.mainuser.valueChanges().subscribe(event => {
@@ -80,11 +81,11 @@ export class DirectionPage implements OnInit, AfterViewInit {
         this.stationConquered = event.stationConquered
       })
 
-      geofence.initialize().then(
+      /*geofence.initialize().then(
           () => console.log('Geofence Plugin Ready'),
           (err) => console.log(err)
       )
-      this.addGeofence();
+      this.addGeofence();*/
 
       /* check if conqueror over the conquering duration */
       this.hourlyBonus() /* get remaining bonus first */
@@ -192,7 +193,6 @@ export class DirectionPage implements OnInit, AfterViewInit {
 
 
       });
-      this.addGeofence();
   }
 
   calculateAndDisplayRoute(formValues) {
@@ -486,12 +486,12 @@ export class DirectionPage implements OnInit, AfterViewInit {
         return d;
     }
     ////////geofence//////////////////////////////////////////
-    private addGeofence() {
+    /*private addGeofence() {
         //options describing geofence
         let fence = {
             id: '69ca1b88-6fbe-4e80-a4d4-ff4d3748acdb', //any unique ID
-            latitude: /*1.359754,*/1.3555354,//1.381473, //center of geofence radius
-            longitude: /*103.7512594,*/103.7402279,//103.8449685,
+            latitude: 1.359754,1.3555354,//1.381473, //center of geofence radius
+            longitude: 103.7512594,103.7402279,//103.8449685,
             radius: 50, //radius to edge of geofence in meters
             transitionType: 1, //trigger when enter
             notification: { //notification settings
@@ -506,5 +506,5 @@ export class DirectionPage implements OnInit, AfterViewInit {
             () => this.showAlert('Geofence added', 'yeah'),
             (err) => console.log('Geofence failed to add')
         );
-    }
+    }*/
 }

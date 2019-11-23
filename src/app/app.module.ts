@@ -19,6 +19,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geofence } from '@ionic-native/geofence/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+
 
 
 
@@ -44,6 +47,8 @@ import { Geofence } from '@ionic-native/geofence/ngx';
       GoogleMaps,
       Geolocation,
       Geofence,
+      AndroidPermissions,
+      LocationAccuracy,
   ],
   bootstrap: [AppComponent]
 })
