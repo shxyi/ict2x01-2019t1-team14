@@ -24,7 +24,7 @@ export class RegisterPage implements OnInit {
     public router: Router,
     public formBuilder: FormBuilder,
     public user: UserService,
-    public afstore: AngularFirestore
+    public afstore: AngularFirestore,
   ) {
     this.loginForm = formBuilder.group({
             username: ['', Validators.compose([Validators.required, Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')])],
@@ -93,9 +93,19 @@ export class RegisterPage implements OnInit {
       }
 
       catch(error) {
-        await errorEAlert.present()
+        //await errorEAlert.present()
+        this.showAlert("Error", error.message)
       }
     }
+  }
+
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ["Ok"]
+    })
+    await alert.present()
   }
 }
 
@@ -129,5 +139,4 @@ export class AgeValidator {
 
 		return null;
 	}
-
 }

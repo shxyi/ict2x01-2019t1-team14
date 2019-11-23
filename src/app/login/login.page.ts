@@ -23,7 +23,6 @@ export class LoginPage implements OnInit {
     public alertController: AlertController,
     public router: Router,
     public user: UserService,
-
   ) {}
 
   ngOnInit() {
@@ -62,8 +61,17 @@ export class LoginPage implements OnInit {
       }
     }
     catch(err) {
-      console.dir(err)
-      await errorAlert.present()
+      if(err.code==="auth/user-not-found" || err.code==="auth/invalid-email"){
+        this.showAlert("Error", "User not found.")
+      }
+      else if(err.code === "auth/wrong-password"){
+        this.showAlert("Error", "The password is incorrect.")
+      }
+      else{
+        this.showAlert("Error", err.message)
+        console.dir(err)
+        //await errorAlert.present()
+      }
     }
   }
 
@@ -82,5 +90,14 @@ export class LoginPage implements OnInit {
 
   async goReset() {
     this.router.navigate(['forgetpw'])
+  }
+
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ["Ok"]
+    })
+    await alert.present()
   }
 }

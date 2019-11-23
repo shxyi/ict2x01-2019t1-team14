@@ -76,14 +76,21 @@ export class EditProfilePage implements OnInit {
       this.showAlert("Error", "One or more fields are empty.")
       return
     }
-    else if(this.username==this.firebaseUsername && this.password==this.firebasePassword && this.commuteMethod==this.firebaseCommuteMethod &&
-      this.gender==this.firebaseGender && this.age==this.firebaseAge && this.email==this.firebaseEmail){
+    else if(this.username==this.firebaseUsername && this.password==this.firebasePassword && this.cpassword=="" &&
+      this.commuteMethod==this.firebaseCommuteMethod && this.gender==this.firebaseGender && this.age==this.firebaseAge &&
+      this.email==this.firebaseEmail){
       this.showAlert("System Message", "You have change nothing.")
       this.router.navigate(['/tabs/profile'])
       return
     }
 
-    if(this.cpassword !== ""){
+    if(this.cpassword == ""){
+      if(this.password !== this.firebasePassword){
+        this.showAlert("Error", "Please key in the Confirm Password.")
+        return
+      }
+    }
+    else if(this.cpassword !== ""){
       if(this.password !== this.cpassword){
         this.showAlert("Error", "Password does not match.")
         return
@@ -92,7 +99,6 @@ export class EditProfilePage implements OnInit {
 
     /* update profile */
     if(this.username !== this.firebaseUsername) {
-			//await this.user.updateEmail(this.username) /* update account username(email) */
 			this.mainuser.update({ /* update firebase variable */
 				username: this.username
 			})
@@ -107,7 +113,7 @@ export class EditProfilePage implements OnInit {
 
     if(this.commuteMethod !== this.firebaseCommuteMethod) {
       this.mainuser.update({ /* update firebase variable */
-				commuteMethod: this.commuteMethod
+				commuteM: this.commuteMethod
 			})
     }
 
@@ -123,11 +129,17 @@ export class EditProfilePage implements OnInit {
 			})
     }
 
-    if(this.email !== this.user.getEmail()) {
-      await this.user.updateEmail(this.email) /* update account username(email) */
-      this.mainuser.update({ /* update firebase variable */
-				email: this.email
-			})
+    try{
+      if(this.email !== this.firebaseEmail) {
+        await this.user.updateEmail(this.email) /* update account username(email) */
+        this.mainuser.update({ /* update firebase variable */
+          email: this.email
+        })
+      }
+    }
+    catch(error){
+      this.showAlert("Error", error.message)
+      return
     }
 
     this.showAlert("Success", "Update successfully.")
