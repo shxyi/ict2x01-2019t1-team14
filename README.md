@@ -29,7 +29,7 @@ A step by step series of examples that tell you how to get the application runni
 5. To run the application, type "ionic serve --lab". Wait for a moment and it will open up and run on Google Chrome
 ```
 
-## Video
+## Showcase Video
 
 
 ## Feedback Link
