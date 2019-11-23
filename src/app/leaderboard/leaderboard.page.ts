@@ -51,7 +51,7 @@ export class LeaderboardPage implements OnInit {
       snapshot.docs.forEach(doc => {
         this.listOfUsers.push(doc.data())
       })
-      
+
       /* bubble sort */
       let temp = []
       for(let i=this.listOfUsers.length-1; i>0; i--){
@@ -99,7 +99,7 @@ export class LeaderboardPage implements OnInit {
         row.appendChild(rankCol)
         row.appendChild(nameCol)
         document.querySelector('#grid').appendChild(row);
-      } 
+      }
 
       /* display points */
       for(let i=0; i<limit; i++){
