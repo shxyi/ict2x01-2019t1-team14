@@ -15,6 +15,13 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 
+import { IonicStorageModule } from '@ionic/storage';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { Geofence } from '@ionic-native/geofence/ngx';
+
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -24,12 +31,19 @@ import { UserService } from './user.service';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
+      IonicStorageModule.forRoot({
+          name: '_mydb',
+          driverOrder: ['sqlite']
+      })
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    UserService,
+      UserService,
+      GoogleMaps,
+      Geolocation,
+      Geofence,
   ],
   bootstrap: [AppComponent]
 })

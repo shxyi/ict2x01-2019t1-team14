@@ -3,6 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
 import { AlertController } from '@ionic/angular'; /* import pop up modal alert */
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Subscription } from 'rxjs';
+import { Storage } from '@ionic/storage';
+import { NavController, Platform } from '@ionic/angular';
+import { filter } from 'rxjs/operators';
+import { Marker, MarkerOptions, LatLng } from '@ionic-native/google-maps';
+import { Geofence } from '@ionic-native/geofence/ngx';
+
 declare var google;
 
 @Component({
@@ -25,22 +33,58 @@ export class DirectionPage implements OnInit, AfterViewInit {
   debugging = !false /* debugger */
   atStation = !false
 
+    map;
+    currentMapTrack = null;
+    markers = [];
+    polylines = [];
+    shadows = [];
+    data = [];
+    marker;
+    drawMang;
+    savedCircle;
+    distance = 0;
+
   @ViewChild('mapElement', { static: true }) mapNativeElement;
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
   directionForm: FormGroup;
+  userLocation: any = {
+        lat: "",
+        lng: "",
+    }
+  start: any = {
+        lat: "",
+        lng: "",
+    }
+
+    isTracking = false;
+    trackedRoute = [];
+    previousTracks = [];
+
+    positionSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private afs: AngularFirestore,
     private user: UserService,
-    public alert: AlertController,) {
+    public alert: AlertController,
+    private plt: Platform,
+    private geolocation: Geolocation,
+    private storage: Storage,
+    private geofence: Geofence,
+    public navCtrl: NavController,) {
       this.mainuser = afs.doc(`users/${user.getUID()}`)
       this.usersub = this.mainuser.valueChanges().subscribe(event => {
         this.userPoints = event.points
         this.username = event.username
         this.stationConquered = event.stationConquered
       })
+
+      geofence.initialize().then(
+          () => console.log('Geofence Plugin Ready'),
+          (err) => console.log(err)
+      )
+      this.addGeofence();
 
       /* check if conqueror over the conquering duration */
       this.hourlyBonus() /* get remaining bonus first */
@@ -83,33 +127,89 @@ export class DirectionPage implements OnInit, AfterViewInit {
       this.createDirectionForm();
   }
 
+
+    ionViewDidLoad() {
+        this.plt.ready().then(() => {
+            this.loadHistoricRoutes();
+
+            let mapOptions = {
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false
+            };
+
+            this.map = new google.maps.Map(this.mapNativeElement.nativeElement, mapOptions);
+
+            this.geolocation.getCurrentPosition().then((pos) => {
+                let latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                this.map.setCentre(latLng);
+                this.map.setZoom(15);
+            });
+        });
+    }
+
+    loadHistoricRoutes() {
+        this.storage.get('routes').then(data => {
+            if (data) {
+                this.previousTracks = data;
+            }
+        });
+    }
+
   ngOnInit() {
   }
 
   createDirectionForm() {
     this.directionForm = this.fb.group({
-      source: ['', Validators.required],
+      //source: ['', Validators.required],
       destination: ['', Validators.required]
     });
   }
 
   ngAfterViewInit(): void {
-    const map = new google.maps.Map(this.mapNativeElement.nativeElement, {
+    /*const map = new google.maps.Map(this.mapNativeElement.nativeElement, {
       zoom: 7,
       center: { lat: 1.290270, lng: 103.851959 }
     });
-    this.directionsDisplay.setMap(map);
+    this.directionsDisplay.setMap(map);*/
+      this.geolocation.getCurrentPosition().then((resp) => {
+          this.userLocation.lat = resp.coords.latitude;
+          this.userLocation.lng = resp.coords.longitude;
+          
+          this.map = new google.maps.Map(this.mapNativeElement.nativeElement, {
+              zoom: 15,
+              center: { lat: resp.coords.latitude, lng: resp.coords.longitude }
+          });
+
+          this.marker = new google.maps.Marker({
+              map: this.map,
+              animation: google.maps.Animation.DROP,
+              position: { lat: resp.coords.latitude, lng: resp.coords.longitude }
+          });
+          this.markers.push(this.marker);
+
+
+      });
+      this.addGeofence();
   }
 
   calculateAndDisplayRoute(formValues) {
-    const mapOptions = new google.maps.Map(this.mapNativeElement.nativeElement, {
-      zoom: 7,
-      center: { lat: 1.290270, lng: 103.851959 }
-    });
+      this.geolocation.getCurrentPosition().then((resp) => {                  //get user current location
+          this.start.lat = resp.coords.latitude;
+          this.start.lng = resp.coords.longitude;
+          //this.addGeofence(resp.coords.latitude, resp.coords.longitude);
+      });
+
+      this.map = new google.maps.Map(this.mapNativeElement.nativeElement, {
+          zoom: 11.5,
+          center: this.currentLocation//{ lat: 1.3227352, lng: 103.8143577 }
+      });
 
     const that = this;
     this.directionsService.route({
-      origin: formValues.source,
+      origin: this.start,
       destination: formValues.destination,
       travelMode: 'WALKING',
       provideRouteAlternatives: true
@@ -117,7 +217,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
       if (status === 'OK') {
         for (var i = 0, len = response.routes.length; i < len; i++) {
           new google.maps.DirectionsRenderer({
-            map: mapOptions,
+            map: this.map,
             directions: response,
             routeIndex: i
           });
@@ -308,5 +408,103 @@ export class DirectionPage implements OnInit, AfterViewInit {
       buttons: ["Ok"]
     })
     await alert.present()
-  }
+    }
+
+    ////////////////////Geolocation/////////////////////////////////////////////////////////////////
+    startTracking() {
+        this.isTracking = true;
+        this.trackedRoute = [];
+
+        this.positionSubscription = this.geolocation.watchPosition()                //keep tracking user location
+            .pipe(
+                filter((p) => p.coords !== undefined) //Filter Out Errors
+            )
+            .subscribe(data => {
+                setTimeout(() => {
+                    this.trackedRoute.push({ lat: data.coords.latitude, lng: data.coords.longitude });
+                    this.redrawPath(this.trackedRoute);
+
+                    if (this.marker && this.marker.setMap) {      //remove previous marker
+                        this.marker.setMap(null);
+                    }
+
+                    this.marker = new google.maps.Marker({       //display updated user location
+                        map: this.map,
+                        position: { lat: data.coords.latitude, lng: data.coords.longitude }
+                    });
+                    this.markers.push(this.marker);   
+                    this.distance = this.calculateDistance(this.start.lat, this.start.lng, data.coords.latitude, data.coords.longitude)
+                });
+            });
+
+    }
+
+    redrawPath(path) {
+        if (this.currentMapTrack) {
+            this.currentMapTrack.setMap(null);
+        }
+
+        if (path.length > 1) {
+            this.currentMapTrack = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#ff00ff',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            this.currentMapTrack.setMap(this.map);
+        }
+    }
+
+    stopTracking() {
+        let newRoute = { finished: new Date().getTime(), path: this.trackedRoute };
+        this.previousTracks.push(newRoute);
+        this.storage.set('routes', this.previousTracks);
+
+        this.isTracking = false;
+        this.positionSubscription.unsubscribe();
+        this.currentMapTrack.setMap(null);
+    }
+
+    showHistoryRoute(route) {
+        this.redrawPath(route);
+    }
+    ///////distance calculate////////////////////////////////
+    toRad(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371; // km
+        var dLat = this.toRad((lat2 - lat1));
+        var dLon = this.toRad((lon2 - lon1));
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d;
+    }
+    ////////geofence//////////////////////////////////////////
+    private addGeofence() {
+        //options describing geofence
+        let fence = {
+            id: '69ca1b88-6fbe-4e80-a4d4-ff4d3748acdb', //any unique ID
+            latitude: /*1.359754,*/1.3555354,//1.381473, //center of geofence radius
+            longitude: /*103.7512594,*/103.7402279,//103.8449685,
+            radius: 50, //radius to edge of geofence in meters
+            transitionType: 1, //trigger when enter
+            notification: { //notification settings
+                id: 1, //any unique ID
+                title: 'Yio Chu Kang MRT', //notification title
+                text: 'Conquer Yio Chu Kang MRT.', //notification body
+                openAppOnClick: true //open app when notification is tapped           
+            },
+        }
+
+        this.geofence.addOrUpdate(fence).then(
+            () => this.showAlert('Geofence added', 'yeah'),
+            (err) => console.log('Geofence failed to add')
+        );
+    }
 }
