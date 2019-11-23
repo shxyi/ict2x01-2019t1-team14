@@ -37,15 +37,15 @@ export class EditProfilePage implements OnInit {
     public formBuilder: FormBuilder,
     public alert: AlertController,
   ) {
-      this.mainuser = afs.doc(`users/${user.getUID()}`)
-  		this.sub = this.mainuser.valueChanges().subscribe(event => {
-        this.firebaseUsername = event.username
-        this.firebasePassword = event.password
-        this.firebaseCommuteMethod = event.commuteMethod
-        this.firebaseGender = event.gender
-        this.firebaseAge = event.age
-        this.firebaseEmail = event.email
-      })
+    this.mainuser = afs.doc(`users/${user.getUID()}`)
+		this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.username = this.firebaseUsername = event.username
+      this.password = this.firebasePassword = event.password
+      this.commuteMethod = this.firebaseCommuteMethod = event.commuteM
+      this.gender = this.firebaseGender = event.gender
+      this.age = this.firebaseAge = event.age
+      this.email = this.firebaseEmail = event.email
+    })
 
       this.loginForm = formBuilder.group({
         username: ['', Validators.compose([Validators.required, Validators.maxLength(25), Validators.pattern('[a-zA-Z]*')])],
@@ -64,8 +64,22 @@ export class EditProfilePage implements OnInit {
 
   async updateProfile() {
     /* validation */
+    console.log(this.username)
+    console.log(this.password)
+    console.log(this.commuteMethod)
+    console.log(this.gender)
+    console.log(this.age)
+    console.log(this.email)
+
+
     if(this.username=="" || this.password=="" || this.commuteMethod==null || this.gender==null || this.age==null || this.email==""){
       this.showAlert("Error", "One or more fields are empty.")
+      return
+    }
+    else if(this.username==this.firebaseUsername && this.password==this.firebasePassword && this.commuteMethod==this.firebaseCommuteMethod &&
+      this.gender==this.firebaseGender && this.age==this.firebaseAge && this.email==this.firebaseEmail){
+      this.showAlert("System Message", "You have change nothing.")
+      this.router.navigate(['/tabs/profile'])
       return
     }
 
@@ -110,6 +124,7 @@ export class EditProfilePage implements OnInit {
     }
 
     if(this.email !== this.user.getEmail()) {
+      await this.user.updateEmail(this.email) /* update account username(email) */
       this.mainuser.update({ /* update firebase variable */
 				email: this.email
 			})
