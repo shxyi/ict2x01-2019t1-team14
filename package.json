@@ -96,7 +96,9 @@
         "ANDROID_SUPPORT_VERSION": "27.+"
       },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-request-location-accuracy": {},
+      "cordova-plugin-request-location-accuracy": {
+        "PLAY_SERVICES_LOCATION_VERSION": "16.+"
+      },
       "cordova-plugin-geolocation": {}
     },
     "platforms": [
