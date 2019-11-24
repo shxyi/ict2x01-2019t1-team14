@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
 import { AlertController } from '@ionic/angular'; /* import pop up modal alert */
+import { Router } from '@angular/router';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
@@ -69,6 +70,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
     private afs: AngularFirestore,
     private user: UserService,
     public alert: AlertController,
+    public router: Router,
     private plt: Platform,
     private geolocation: Geolocation,
     private storage: Storage,
@@ -410,6 +412,31 @@ export class DirectionPage implements OnInit, AfterViewInit {
     await alert.present()
     }
 
+  async showFeedbackAlert() {
+    const alert = await this.alert.create({ /* https://ionicframework.com/docs/v3/api/components/alert/AlertController/ */
+      header: "Feedback",
+      message: 
+        "Do you wish to provide a feedback for this route?<br><br>" +
+        "Additional points will be awarded.",
+      buttons: [
+        {
+          text: 'Feedback',
+          handler: () => {
+            this.router.navigate(['/feedback'], { // https://stackoverflow.com/questions/52187282/ionic-4-how-to-pass-data-between-pages-using-navctrl-or-router-service
+              queryParams: { // pass object to another page
+                routePts: this.distance // data
+              }
+            });
+          }
+        },
+        {
+          text: "Cancel"
+        }
+      ]
+    })
+    await alert.present()
+    }
+
     ////////////////////Geolocation/////////////////////////////////////////////////////////////////
     startTracking() {
         this.isTracking = true;
@@ -464,6 +491,9 @@ export class DirectionPage implements OnInit, AfterViewInit {
         this.isTracking = false;
         this.positionSubscription.unsubscribe();
         this.currentMapTrack.setMap(null);
+
+        // feed back alert
+        this.showFeedbackAlert()
     }
 
     showHistoryRoute(route) {

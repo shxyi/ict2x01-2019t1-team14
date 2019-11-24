@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-feedback',
@@ -12,6 +13,7 @@ import { UserService } from '../user.service';
 })
 export class FeedbackPage {
 
+  feedbackPts: number /* from yudi route points */
   customForm: FormGroup;
 
   constructor(
@@ -19,7 +21,12 @@ export class FeedbackPage {
     public router: Router,
     public alertController: AlertController,
     public starRate: UserService,
-  ) {}
+    public activatedRoute : ActivatedRoute,
+  ) {
+    this.activatedRoute.queryParams.subscribe((res)=>{
+      this.feedbackPts = res['routePts']
+    });
+  }
   
   logRatingChange(rating){
         console.log("changed rating: ",rating);
@@ -64,7 +71,11 @@ export class FeedbackPage {
       this.enjoyment = 0;
       this.routeID = "";
       this.feedbackSubmit();
-      this.router.navigate(['shake-dice']);
+      this.router.navigate(['/shake-dice'], { // https://stackoverflow.com/questions/52187282/ionic-4-how-to-pass-data-between-pages-using-navctrl-or-router-service
+        queryParams: { // pass object to another page
+          routePts: this.feedbackPts // data
+        }
+      });
     })
       .catch(error => {
       });

@@ -15,7 +15,7 @@ export class ShakeDicePage implements OnInit {
   points: number
   hide = true;
   multiplier: number
-  feedbackPts: number /* from route points */
+  feedbackPts: number /* from yudi route points */
   totalPts: number
 
   constructor(
@@ -76,6 +76,6 @@ export class ShakeDicePage implements OnInit {
   }
 
   async home() {
-    this.router.navigate(['/login']) /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+    this.router.navigate(['tabs/direction'])
   }
 }
