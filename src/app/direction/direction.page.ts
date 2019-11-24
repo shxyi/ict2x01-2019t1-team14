@@ -164,6 +164,16 @@ export class DirectionPage implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
+  async errorAlert() {
+   const alert = await this.alert.create({
+       header: "Error!",
+       message: "Directions request failed.",
+       buttons: ['OK']
+     });
+
+     await alert.present();
+   }
+
   createDirectionForm() {
     this.directionForm = this.fb.group({
       //source: ['', Validators.required],
@@ -180,7 +190,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
       this.geolocation.getCurrentPosition().then((resp) => {
           this.userLocation.lat = resp.coords.latitude;
           this.userLocation.lng = resp.coords.longitude;
-          
+
           this.map = new google.maps.Map(this.mapNativeElement.nativeElement, {
               zoom: 15,
               center: { lat: resp.coords.latitude, lng: resp.coords.longitude }
@@ -226,7 +236,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
           console.log(i);
         }
       } else {
-        window.alert('Directions request failed due to ' + status);
+        this.errorAlert();
       }
     });
   }
@@ -292,7 +302,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
             if(min == 60) {
               min = 0
             }
-            
+
             let hour = date.getHours() - conquerHour
             if(hour < 0) {
               hour += 24 /* pass midnight, next day */
@@ -300,7 +310,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
             hour = this.conquerDuration - hour
             if(!carryFlag && date.getMinutes()>conquerMin)
               hour -= 1
-            
+
             if(this.username == conqueror) {
               this.showAlert("Conquering",
                 "You are currently conquering this station.<br><br>" +
@@ -316,7 +326,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
       })
     })
   }
-  
+
   getHourMin_strToNum(str: string, data: number): number { /* split string and return num cast hour*/
     let str1 = str.split('_') /* split date and time */
     let str2 = str1[1].split(':') /* split hour and minute */
@@ -326,7 +336,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
   async conquerConfirm(station: any) { /* conquer modal */
     const alert = await this.alert.create({ /* https://ionicframework.com/docs/v3/api/components/alert/AlertController/ */
       header: "Conquer",
-      message: 
+      message:
         "Do you wish to conquer this station?<br><br>" +
         "<li>Points Cost: " + station.data().pointsCost + "</li>" +
         "<li>Hourly Bonus Points: " + station.data().hourlyBonusPoints + "</li>",
@@ -347,7 +357,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
 
               let date = new Date()
               /* update station firebase variable */
-              this.mainstation.update({ 
+              this.mainstation.update({
                 conqueror: this.username,
                 conquerDateTime: date.getFullYear() + "/" + (date.getMonth()+1) + "/" + date.getDate() +
                   "_" + date.getHours() + ":" + date.getMinutes(),
@@ -415,7 +425,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
   async showFeedbackAlert() {
     const alert = await this.alert.create({ /* https://ionicframework.com/docs/v3/api/components/alert/AlertController/ */
       header: "Feedback",
-      message: 
+      message:
         "Do you wish to provide a feedback for this route?<br><br>" +
         "Additional points will be awarded.",
       buttons: [
@@ -459,7 +469,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
                         map: this.map,
                         position: { lat: data.coords.latitude, lng: data.coords.longitude }
                     });
-                    this.markers.push(this.marker);   
+                    this.markers.push(this.marker);
                     this.distance = this.calculateDistance(this.start.lat, this.start.lng, data.coords.latitude, data.coords.longitude)
                 });
             });
@@ -528,7 +538,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
                 id: 1, //any unique ID
                 title: 'Yio Chu Kang MRT', //notification title
                 text: 'Conquer Yio Chu Kang MRT.', //notification body
-                openAppOnClick: true //open app when notification is tapped           
+                openAppOnClick: true //open app when notification is tapped
             },
         }
 
