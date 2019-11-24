@@ -31,6 +31,7 @@ A step by step series of examples that tell you how to get the application runni
 ```
 
 ## Component Diagram
+![Component Diagram](https://github.com/shxyi/ict2x01-2019t1-team14.git/src/assets/icon/Component-Diagram.png)
 
 
 ## Showcase Video
