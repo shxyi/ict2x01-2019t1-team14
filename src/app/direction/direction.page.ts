@@ -46,6 +46,8 @@ export class DirectionPage implements OnInit, AfterViewInit {
     savedCircle;
     distance = 0;
 
+    buttonDisabled = false;
+
   @ViewChild('mapElement', { static: true }) mapNativeElement;
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
@@ -237,6 +239,7 @@ export class DirectionPage implements OnInit, AfterViewInit {
         }
       } else {
         this.errorAlert();
+        this.buttonDisabled = !this.buttonDisabled;
       }
     });
   }

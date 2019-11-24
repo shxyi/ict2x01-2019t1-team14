@@ -18,7 +18,7 @@
             <ion-input formControlName="destination"></ion-input>
         </ion-item>
         <ion-button id="dirBtn" expand="full" type="submit" (click)="directionButton()" [disabled]="directionForm.invalid">Get Direction</ion-button>
-        <ion-button expand="full" [disabled]="directionForm.invalid" icon-left (click)="startTracking()" *ngIf="!isTracking">
+        <ion-button expand="full" [disabled]="(directionForm.invalid) || (buttonDisabled)" icon-left (click)="startTracking()" *ngIf="!isTracking">
             <ion-icon name="locate"></ion-icon>
             Start Journey
         </ion-button>
