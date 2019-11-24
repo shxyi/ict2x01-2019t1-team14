@@ -44,8 +44,8 @@ export class LoginPage implements OnInit {
         })
 
     try {
-      this.email = "chu_han93@hotmail.com"
-      this.password = "Qscmlp753"
+      // this.email = "chu_han93@hotmail.com"
+      // this.password = "Qscmlp753"
       if(this.email=="" || this.password==""){
         this.showAlert("Error", "One or more fields are empty.")
         return
